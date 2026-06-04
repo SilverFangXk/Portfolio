@@ -16,7 +16,8 @@ I am currently refining the core modules and design system. This project serves 
 I am currently iterating on the following core modules:
 *   **[ ] Project Showcase (Bento Grid):** Creating a sophisticated, responsive Bento Grid to highlight projects .
 *   **[ ] Certification & Credentials Archive:** Building a dedicated gallery for my professional certifications.
-*   
+
+   
 ---
 
 ## 📬 Contact & Collaboration
