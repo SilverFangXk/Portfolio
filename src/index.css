@@ -1,5 +1,10 @@
-@import "tailwindcss";
+/* 1. External imports MUST be at the very top */
 @import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+
+/* 2. Then the Tailwind directive */
+@import "tailwindcss";
+
+/* 3. Theme definitions */
 @theme {
   --color-border: hsl(var(--border));
   --color-background: hsl(var(--background));
@@ -9,6 +14,8 @@
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-card: hsl(var(--card));
   --carter: "Carter One", cursive;
+  
+  /* Animations */
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-subtle: pulse-subtle 4s ease-in-out infinite;
   --animate-fade-in: fade-in 0.7s ease-out forwards;
@@ -37,23 +44,18 @@
   }
 }
 
+/* 4. Layer definitions */
 @layer base {
   :root {
-    --background: 210 100% 98%;      /* Light background HSL */
+    --background: 210 100% 98%;
     --foreground: 215 25% 15%;
     --card: 0 0% 100%;
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
     --secondary: 270 40% 65%;
-    --border: 215 15% 85%;            /* FIX: Added missing light mode border token */
+    --border: 215 15% 85%;
     
-    --bg-image: radial-gradient(
-      140% 120% at 20% 10%, 
-      rgba(29, 78, 216, 0.05) 0%,     
-      rgba(99, 102, 241, 0.03) 45%,    
-      hsla(var(--background) / 0.6) 75%, 
-      hsl(var(--background)) 100%
-    );
+    --bg-image: radial-gradient(140% 120% at 20% 10%, rgba(29, 78, 216, 0.05) 0%, rgba(99, 102, 241, 0.03) 45%, hsla(var(--background) / 0.6) 75%, hsl(var(--background)) 100%);
   }
 
   .dark {
@@ -63,40 +65,23 @@
     --secondary: 270 50% 75%;
     --primary-foreground: 0 0% 100%;
     --border: 217 32% 20%;
-    --background: 222 47% 5%; 
-
-    --bg-image: radial-gradient(
-      140% 120% at 20% 10%, 
-      rgba(14, 116, 144, 0.18) 0%,    
-      rgba(30, 58, 138, 0.12) 40%,    
-      hsla(var(--background) / 0.6) 70%, 
-      hsl(var(--background)) 100%
-    );
+    --background: 222 47% 5%;
+    --bg-image: radial-gradient(140% 120% at 20% 10%, rgba(14, 116, 144, 0.18) 0%, rgba(30, 58, 138, 0.12) 40%, hsla(var(--background) / 0.6) 70%, hsl(var(--background)) 100%);
   }
 
- /* TO THIS: */
-  * {
-    @apply border-border;
-  }
-
-  html, section, footer, nav, header {
-    @apply transition-colors duration-200 ease-out;
-  }
-  html {
-    @apply scroll-smooth;
-  }
+  * { @apply border-border; }
+  html, section, footer, nav, header { @apply transition-colors duration-200 ease-out; }
+  html { @apply scroll-smooth; }
   body {
-    /* FIX: Applies the responsive gradient background variable seamlessly */
     background: var(--bg-image);
     @apply text-foreground transition-colors duration-300 min-h-screen;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
+/* 5. Custom Utilities */
 @utility container {
-  margin-inline : auto;
-  padding-inline : 2rem;
-
+  margin-inline: auto; padding-inline: 2rem;
   @media (width >= 640px) { max-width: 640px; }
   @media (width >= 768px) { max-width: 768px; }
   @media (width >= 1024px) { max-width: 1024px; }
@@ -104,41 +89,11 @@
   @media (width >= 1400px) { max-width: 1400px; }
 }
 
-@utility text-glow {
-  @apply relative transition-all duration-300;
-  /* FIX: Uses a theme variable opacity instead of an immutable hardcoded color token */
-  text-shadow: 0 0 12px var(--color-primary);
-}
+@utility text-glow { @apply relative transition-all duration-300; text-shadow: 0 0 12px var(--color-primary); }
+@utility card-hover { @apply transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/5; }
+@utility gradient-border { @apply relative rounded-xl border border-border transition-all duration-300 bg-card; }
+@utility cosmic-button { @apply px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium transition-all duration-300 hover:shadow-[0_0_15px_var(--color-primary)] hover:scale-105 active:scale-95; }
+@utility star { @apply absolute rounded-full bg-foreground/40; box-shadow: 0 0 10px 2px var(--color-primary); }
+@utility meteor { @apply absolute bg-gradient-to-r from-primary via-primary/40 to-transparent rounded-full; box-shadow: 0 0 10px 5px var(--color-primary); }
 
-@utility card-hover {
-  /* FIX: Added smooth shadow transition that flips naturally depending on theme mode brightness */
-  @apply transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/5;
-}
-
-@utility gradient-border {
-  @apply relative rounded-xl border border-border transition-all duration-300 bg-card;
-  /* FIX: Stripped structural hack background property blocks which overrode dark/light classes */
-}
-
-@utility cosmic-button {
-  @apply px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium
-    transition-all duration-300 hover:shadow-[0_0_15px_var(--color-primary)]
-    hover:scale-105 active:scale-95;
-}
-
-@utility star {
-  @apply absolute rounded-full bg-foreground/40; /* FIX: Softens stars in light mode */
-  box-shadow: 0 0 10px 2px var(--color-primary);
-}
-
-@utility meteor {
-  @apply absolute bg-gradient-to-r from-primary via-primary/40 to-transparent rounded-full;
-  box-shadow: 0 0 10px 5px var(--color-primary);
-}
-
-#root {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
-}
+#root { max-width: 100%; margin: 0 auto; padding: 0; text-align: center; }
