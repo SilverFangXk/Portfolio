@@ -23,7 +23,7 @@ I am currently iterating on the following core modules:
 I am currently open to internship opportunities in the data engineering and web development space.
 
 *   **GitHub:** SilverFangXl
-*   **LinkedIn:**Khadija Chkhichkh
+*   **LinkedIn:** Khadija Chkhichkh
 *   **Portfolio:** [Coming Soon]
 
 ---
