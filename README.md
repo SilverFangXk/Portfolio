@@ -1,16 +1,31 @@
-# React + Vite
+# Portfolio Khadija Chkhichkh (In Development)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A professional, premium-designed portfolio project showcasing my journey as a **Data Engineer & Web Developer**. This platform is being architected with a focus on modern, minimalist aesthetics and clean component-driven development.
 
-Currently, two official plugins are available:
+## Status: Active Development
+I am currently refining the core modules and design system. This project serves as a live demonstration of my ability to build high-performance web applications using the modern React ecosystem.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠 Tech Stack
+*   **Framework:** React + Vite
+*   **Styling:** Tailwind CSS (v4)
+*   **Routing:** React Router DOM
+*   **UI Components & Icons:** Lucide React, React Icons
+*   **Build Tool:** Vite
 
-## React Compiler
+## Current Development Focus
+I am currently iterating on the following core modules:
+*   **[ ] Project Showcase (Bento Grid):** Creating a sophisticated, responsive Bento Grid to highlight projects .
+*   **[ ] Certification & Credentials Archive:** Building a dedicated gallery for my professional certifications.
+*   
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📬 Contact & Collaboration
+I am currently open to internship opportunities in the data engineering and web development space.
 
-## Expanding the ESLint configuration
+*   **GitHub:** SilverFangXl
+*   **LinkedIn:**Khadija Chkhichkh
+*   **Portfolio:** [Coming Soon]
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+*Built with passion, one component at a time.*
