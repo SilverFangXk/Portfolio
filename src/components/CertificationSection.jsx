@@ -11,7 +11,7 @@ export const CertificationsSection = () => {
     {
       title: "Introduction to Machine Learning",
       issuer: "Kaggle",
-      issueDate: "Completed 2026",
+      issueDate: "Completed 2025",
       image: kaggleCertImg,
       verificationUrl: "https://www.kaggle.com/learn/intro-to-machine-learning", // Update with your personal certificate link if you have it
       description: "Covered core machine learning concepts including model building, random forests, data validation, underfitting and overfitting, and competing in Kaggle competitions."
@@ -19,18 +19,18 @@ export const CertificationsSection = () => {
     {
       title: "Data Cleaning",
       issuer: "Kaggle",
-      issueDate: "Completed 2026",
+      issueDate: "Completed 2025",
       image: kaggleCertImg2,
       verificationUrl: "https://www.kaggle.com/learn/data-cleaning", // Update with your personal certificate link if you have it
       description: "Mastered workflows for handling missing values, parsing dates, encoding problematic character sets, correcting inconsistent data entries, and scaling/normalizing features."
     },
     {
-      title: "Data Engineering Track Progression",
+      title: "Introduction to Apache Kafka — DataCamp",
       issuer: "DataCamp",
       issueDate: "Completed 2025",
       image: DataCampCertImg,
       verificationUrl: "https://www.datacamp.com", // Update with your personal certificate link if you have it
-      description: "Comprehensive training focused on data pipeline architecture, managing relational databases, workflow orchestration, and parsing complex enterprise data structures."
+      description: "Covered the fundamentals of Apache Kafka, including event-driven architecture, real-time data streaming, and building scalable message-based data pipelines for distributed systems."
     }
   ];
 
