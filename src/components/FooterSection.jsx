@@ -11,7 +11,7 @@ export const Footer = () => {
   // 1. Socials & Contact Methods Array
   const contacts = [
     { name: "LinkedIn", icon: <FaLinkedin size={16} />, url: "https://linkedin.com/in/khadija-chkhichkh", color: "hover:text-[#0077B5]" },
-    { name: "Telegram", icon: <Send size={16} />, url: "https://t.me/yourusername", color: "hover:text-[#0088cc]" },
+    { name: "Telegram", icon: <Send size={16} />, url: "https://t.me/silverFangKD", color: "hover:text-[#0088cc]" },
     { name: "WhatsApp", icon: <FaWhatsapp size={16} />, url: "https://wa.me/212634761182", color: "hover:text-[#25D366]" },
     { name: "Email", icon: <Mail size={16} />, url: "mailto:khadijachkhichkh1@gmail.com", color: "hover:text-primary" },
     { name: "Phone", icon: <Phone size={16} />, url: "tel:+212634761182", color: "hover:text-emerald-400" },

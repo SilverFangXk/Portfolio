@@ -120,29 +120,25 @@ export const SkillsSection = () => {
 
         {/* These draw glowing paths behind the elements linking them like a digital tree blueprint */}
         {/* ==================== SVG CONNECTOR (UPDATED FOR 5 NODES) ==================== */}
-        <div className="absolute top-[-90px] left-0 w-full h-[270px] hidden md:block pointer-events-none z-30">
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+       <div className="absolute top-[-90px] left-0 w-full h-[270px] hidden md:block pointer-events-none z-30">
+  <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="rgba(59, 130, 246, 0.7)" />
+        <stop offset="50%" stopColor="rgba(99, 102, 241, 0.7)" />
+        <stop offset="100%" stopColor="rgba(139, 92, 246, 0.7)" />
+      </linearGradient>
+    </defs>
 
-            <defs>
-              <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="rgba(59, 130, 246, 0.7)" />
-                <stop offset="50%" stopColor="rgba(99, 102, 241, 0.7)" />
-                <stop offset="100%" stopColor="rgba(139, 92, 246, 0.7)" />
-              </linearGradient>
-            </defs>
-
-
-
-            {/* ðŸŒ¿ LONGER BRANCHES (PUSHED DOWN) */}
-            <path d="M 576 160 L 120 290" stroke="url(#glowGrad)" strokeWidth="2.2" />
-            <path d="M 576 160 L 320 290" stroke="url(#glowGrad)" strokeWidth="2.2" />
-            <path d="M 576 160 L 576 290" stroke="url(#glowGrad)" strokeWidth="2.2" />
-            <path d="M 576 160 L 830 290" stroke="url(#glowGrad)" strokeWidth="2.2" />
-            <path d="M 576 160 L 1080 290" stroke="url(#glowGrad)" strokeWidth="2.2" />
-            <path d="M 576 160 L 1080 290" stroke="url(#glowGrad)" strokeWidth="2.2" />
-
-          </svg>
-        </div>
+    {/* 6 branches — une par colonne */}
+    <path d="M 576 160 L 80  280" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
+    <path d="M 576 160 L 260 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
+    <path d="M 576 160 L 480 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
+    <path d="M 576 160 L 690 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
+    <path d="M 576 160 L 920 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
+    <path d="M 576 160 L 1160 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
+  </svg>
+</div>
 
         {/* ==================== LEVEL 2 & 3: BRANCHES AND LEAVES ==================== */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 w-full">

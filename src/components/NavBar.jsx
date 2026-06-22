@@ -36,10 +36,10 @@ export const Navbar = () => {
     >
       {/* Changed to flex and justify-between for immaculate distribution */}
       <div className="w-100%  mx-auto flex  justify-between px-6">
-        
+
         {/* 1. DESKTOP MENU (LEFT SIDE) */}
         {/* LEFT MENU */}
-<       div className="hidden md:flex flex-1 items-center gap-3">      
+        <       div className="hidden md:flex flex-1 items-center gap-3">
           {navItems.map((item, key) => (
             <a
               key={key}
@@ -55,35 +55,35 @@ export const Navbar = () => {
 
         {/* 2. NAME (CENTER PIECE) */}
         <div className="flex flex-1 justify-center">
-            <a
-                href="#hero"
-                className="text-xl font-bold text-primary flex items-center tracking-tight select-none"
-            >
-                <span className="relative z-10">
-                    <span className="text-glow font-carter text-4xl">Khadija Chkhichkh</span>
-                </span>
-            </a>
+          <a
+            href="#hero"
+            className="text-xl font-bold text-primary flex items-center tracking-tight select-none"
+          >
+            <span className="relative z-10">
+              <span className="text-glow font-carter text-4xl">Khadija Chkhichkh</span>
+            </span>
+          </a>
         </div>
-        
+
 
         {/* 3. SOCIALS (RIGHT SIDE) */}
         <div className="hidden md:flex flex-1 items-center justify-end gap-4">
-            <a href="https://wa.me/212634761182" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-emerald-500 transition-colors p-2 hover:bg-emerald-500/10 rounded-full">
+          <a href="https://wa.me/212634761182" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-emerald-500 transition-colors p-2 hover:bg-emerald-500/10 rounded-full">
             <FaWhatsapp size={24} />
           </a>
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
+          <a href="https://github.com/SilverFangXk" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
             <FaGithub size={19} />
           </a>
           <a href="https://linkedin.com/in/khadija-chkhichkh" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
             <FaLinkedin size={24} />
           </a>
-          
+
         </div>
 
         {/* MOBILE MENU TOGGLE BUTTON */}
         <div className="flex md:hidden items-center">
-          <button 
-            onClick={() => setIsMenuOpen((prev) => !prev)} 
+          <button
+            onClick={() => setIsMenuOpen((prev) => !prev)}
             className="p-2 text-foreground z-50 rounded-md hover:bg-primary/10 transition-colors"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -118,9 +118,15 @@ export const Navbar = () => {
 
           {/* Mobile Socials */}
           <div className="flex space-x-6">
-            <a href="https://github.com" className="text-foreground/70 hover:text-primary"><FaGithub size={24} /></a>
-            <a href="https://linkedin.com" className="text-foreground/70 hover:text-primary"><FaLinkedin size={24} /></a>
-            <a href="https://wa.me/YOUR_PHONE_NUMBER"  className="text-foreground/70 hover:text-primary"><FaWhatsapp size={24} /></a>
+            <a href="https://wa.me/212634761182" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-emerald-500 transition-colors p-2 hover:bg-emerald-500/10 rounded-full">
+              <FaWhatsapp size={24} />
+            </a>
+            <a href="https://github.com/SilverFangXk" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
+              <FaGithub size={19} />
+            </a>
+            <a href="https://linkedin.com/in/khadija-chkhichkh" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
+              <FaLinkedin size={24} />
+            </a>
           </div>
         </div>
 
