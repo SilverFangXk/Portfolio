@@ -5,8 +5,8 @@ import myProfileImg from "../assets/profile.jpeg";
 
 export const HeroSection = () => {
   const headlineText = "Hi, I'm Khadija";
-  const paragraphText = "I'm a passionate developer creating beautiful, high-performance web applications with clean code and modern design systems.";
-  
+  const paragraphText = "Data Engineering student passionate about building scalable data solutions and turning raw data into meaningful insights.Interested in Data Engineering, Business Intelligence, Data Analytics, and Web Development. ";
+
   const [displayedHeadline, setDisplayedHeadline] = useState("");
   const [displayedParagraph, setDisplayedParagraph] = useState("");
   const [isTypingDone, setIsTypingDone] = useState(false);

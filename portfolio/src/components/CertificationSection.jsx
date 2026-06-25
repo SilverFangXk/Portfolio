@@ -4,6 +4,9 @@ import { Award, ExternalLink, Calendar, ShieldCheck } from "lucide-react";
 import kaggleCertImg from "../assets/khadija_chkhichkh_IntroToMachineLearning.png";
 import kaggleCertImg2 from "../assets/khadija_chkhichkh_DataCleaning.png";
 import DataCampCertImg from "../assets/data_camp.png";
+import htmlBeginnerImg from "../assets/part1.png"; 
+import htmlIntermediateImg from "../assets/part2.png";
+import htmlAdvancedImg from "../assets/part3.png";
 
 export const CertificationsSection = () => {
   // 2. Updated data array matching your actual credentials
@@ -11,26 +14,50 @@ export const CertificationsSection = () => {
     {
       title: "Introduction to Machine Learning",
       issuer: "Kaggle",
-      issueDate: "Completed 2026",
+      issueDate: "Completed 2025",
       image: kaggleCertImg,
-      verificationUrl: "https://www.kaggle.com/learn/intro-to-machine-learning", // Update with your personal certificate link if you have it
+      verificationUrl: "https://www.kaggle.com/learn/certification/khadijachkhichkh1/intro-to-machine-learning",
       description: "Covered core machine learning concepts including model building, random forests, data validation, underfitting and overfitting, and competing in Kaggle competitions."
     },
     {
       title: "Data Cleaning",
       issuer: "Kaggle",
-      issueDate: "Completed 2026",
+      issueDate: "Completed 2025",
       image: kaggleCertImg2,
-      verificationUrl: "https://www.kaggle.com/learn/data-cleaning", // Update with your personal certificate link if you have it
+      verificationUrl: "https://www.kaggle.com/learn/certification/khadijachkhichkh1/data-cleaning",
       description: "Mastered workflows for handling missing values, parsing dates, encoding problematic character sets, correcting inconsistent data entries, and scaling/normalizing features."
     },
     {
-      title: "Data Engineering Track Progression",
+      title: "Introduction to Apache Kafka — DataCamp",
       issuer: "DataCamp",
       issueDate: "Completed 2025",
       image: DataCampCertImg,
-      verificationUrl: "https://www.datacamp.com", // Update with your personal certificate link if you have it
-      description: "Comprehensive training focused on data pipeline architecture, managing relational databases, workflow orchestration, and parsing complex enterprise data structures."
+      verificationUrl: "https://www.datacamp.com/statement-of-accomplishment/course/045d11c911a8ae6decf20bbdc141b020475a9931?raw=1",
+      description: "Covered the fundamentals of Apache Kafka, including event-driven architecture, real-time data streaming, and building scalable message-based data pipelines for distributed systems."
+    },
+    {
+      title: "Mastering HTML5 and CSS3 (Beginner Level)",
+      issuer: "Udemy",
+      issueDate: "June 2025",
+      image: htmlBeginnerImg, // Ensure this variable is defined
+      verificationUrl: "https://www.udemy.com/certificate/UC-7ee3ff26-a06f-40ef-b5b5-2322a7bf06bf/",
+      description: "Foundational course covering the basics of HTML5 markup and CSS3 styling."
+    },
+    {
+      title: "Mastering HTML5 and CSS3 (Intermediate Level)",
+      issuer: "Udemy",
+      issueDate: "June 2025",
+      image: htmlIntermediateImg, // Ensure this variable is defined
+      verificationUrl: "https://www.udemy.com/certificate/UC-c952e112-2173-429b-ac29-727f84dbe419/",
+      description: "Intermediate course focusing on deeper web development techniques and responsive design principles."
+    },
+    {
+      title: "Mastering HTML5 and CSS3 (Advanced Level)",
+      issuer: "Udemy",
+      issueDate: "June 2025",
+      image: htmlAdvancedImg, // Ensure this variable is defined
+      verificationUrl: "https://www.udemy.com/certificate/UC-9a90d55d-3cf1-48d5-a660-168214b1c0ec/",
+      description: "Advanced course covering complex layout techniques, animations, and professional web styling workflows."
     }
   ];
 
@@ -40,7 +67,7 @@ export const CertificationsSection = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto max-w-5xl relative z-10">
-        
+
         {/* Section Heading */}
         <div className="flex flex-col items-center mb-16 text-center space-y-3">
           <div className="p-3 rounded-full bg-primary/10 text-primary">
@@ -57,7 +84,7 @@ export const CertificationsSection = () => {
         {/* Certifications Dynamic Matrix Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           {certifications.map((cert, index) => (
-            <div 
+            <div
               key={index}
               className="gradient-border group rounded-2xl border border-border/40 bg-card overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1"
             >
@@ -65,10 +92,10 @@ export const CertificationsSection = () => {
               <div>
                 <div className="relative aspect-video w-full bg-muted/30 overflow-hidden border-b border-border/20 flex items-center justify-center p-4 group-hover:bg-primary/5 transition-colors duration-300">
                   <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
-                  
-                  <img 
-                    src={cert.image} 
-                    alt={`${cert.title} Preview Document`} 
+
+                  <img
+                    src={cert.image}
+                    alt={`${cert.title} Preview Document`}
                     className="max-h-full max-w-full object-contain rounded-md shadow-md transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
