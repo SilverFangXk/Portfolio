@@ -1,0 +1,46 @@
+<svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgSncf2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1917"/>
+      <stop offset="100%" stop-color="#292524"/>
+    </linearGradient>
+    <marker id="arrow2" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#fb923c"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="300" fill="url(#bgSncf2)"/>
+
+  <!-- CSV -->
+  <g>
+    <rect x="30" y="110" width="150" height="90" rx="12" fill="#292524" stroke="#57534e" stroke-width="2"/>
+    <text x="105" y="162" text-anchor="middle" fill="#fdba74" font-family="Arial, sans-serif" font-size="17" font-weight="bold">CSV</text>
+  </g>
+  <line x1="180" y1="155" x2="228" y2="155" stroke="#fb923c" stroke-width="3" marker-end="url(#arrow2)"/>
+
+  <!-- MySQL -->
+  <g>
+    <rect x="233" y="110" width="150" height="90" rx="12" fill="#292524" stroke="#57534e" stroke-width="2"/>
+    <text x="308" y="162" text-anchor="middle" fill="#93c5fd" font-family="Arial, sans-serif" font-size="17" font-weight="bold">MySQL</text>
+  </g>
+  <line x1="383" y1="155" x2="431" y2="155" stroke="#fb923c" stroke-width="3" marker-end="url(#arrow2)"/>
+
+  <!-- Talend -->
+  <g>
+    <rect x="436" y="110" width="150" height="90" rx="12" fill="#3f2d1a" stroke="#fb923c" stroke-width="2"/>
+    <text x="511" y="162" text-anchor="middle" fill="#fdba74" font-family="Arial, sans-serif" font-size="17" font-weight="bold">Talend</text>
+  </g>
+  <line x1="586" y1="155" x2="634" y2="155" stroke="#fb923c" stroke-width="3" marker-end="url(#arrow2)"/>
+
+  <!-- SQL Server -->
+  <g>
+    <rect x="639" y="110" width="160" height="90" rx="12" fill="#292524" stroke="#57534e" stroke-width="2"/>
+    <text x="719" y="162" text-anchor="middle" fill="#93c5fd" font-family="Arial, sans-serif" font-size="17" font-weight="bold">SQL Server</text>
+  </g>
+  <line x1="799" y1="155" x2="847" y2="155" stroke="#fb923c" stroke-width="3" marker-end="url(#arrow2)"/>
+
+  <!-- Power BI -->
+  <g>
+    <rect x="852" y="110" width="130" height="90" rx="12" fill="#1e2a1a" stroke="#84cc16" stroke-width="2"/>
+    <text x="917" y="162" text-anchor="middle" fill="#bef264" font-family="Arial, sans-serif" font-size="17" font-weight="bold">Power BI</text>
+  </g>
+</svg>

@@ -1,4 +1,4 @@
-import { Award, ExternalLink, Calendar, ShieldCheck } from "lucide-react";
+import { ExternalLink, Calendar, ShieldCheck } from "lucide-react";
 
 // 1. Your actual certification images correctly referenced
 import kaggleCertImg from "../assets/khadija_chkhichkh_IntroToMachineLearning.png";
@@ -39,7 +39,7 @@ export const CertificationsSection = () => {
       title: "Mastering HTML5 and CSS3 (Beginner Level)",
       issuer: "Udemy",
       issueDate: "June 2025",
-      image: htmlBeginnerImg, // Ensure this variable is defined
+      image: htmlBeginnerImg,
       verificationUrl: "https://www.udemy.com/certificate/UC-7ee3ff26-a06f-40ef-b5b5-2322a7bf06bf/",
       description: "Foundational course covering the basics of HTML5 markup and CSS3 styling."
     },
@@ -47,7 +47,7 @@ export const CertificationsSection = () => {
       title: "Mastering HTML5 and CSS3 (Intermediate Level)",
       issuer: "Udemy",
       issueDate: "June 2025",
-      image: htmlIntermediateImg, // Ensure this variable is defined
+      image: htmlIntermediateImg,
       verificationUrl: "https://www.udemy.com/certificate/UC-c952e112-2173-429b-ac29-727f84dbe419/",
       description: "Intermediate course focusing on deeper web development techniques and responsive design principles."
     },
@@ -55,28 +55,32 @@ export const CertificationsSection = () => {
       title: "Mastering HTML5 and CSS3 (Advanced Level)",
       issuer: "Udemy",
       issueDate: "June 2025",
-      image: htmlAdvancedImg, // Ensure this variable is defined
+      image: htmlAdvancedImg,
       verificationUrl: "https://www.udemy.com/certificate/UC-9a90d55d-3cf1-48d5-a660-168214b1c0ec/",
       description: "Advanced course covering complex layout techniques, animations, and professional web styling workflows."
     }
   ];
 
   return (
-    <section id="certifications" className="py-24 px-6 relative bg-background">
-      {/* Subtle Background Accent Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+    <section id="certifications" className="py-24 px-6 relative">
 
       <div className="container mx-auto max-w-5xl relative z-10">
 
-        {/* Section Heading */}
-        <div className="flex flex-col items-center mb-16 text-center space-y-3">
-          <div className="p-3 rounded-full bg-primary/10 text-primary">
-            <Award className="h-7 w-7" />
+        {/* Section Heading — matched to the interests dashboard header style */}
+        <div className="flex flex-col items-center mb-16 text-center">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 font-mono text-[11px] text-foreground/80">
+            <span className="h-1.5 w-1.5 animate-pulse-subtle rounded-full bg-primary" />
+            certifications.render()
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Licenses & <span className="text-primary">Certifications</span>
+
+          <h2 className="mt-4 text-3xl md:text-4xl font-black tracking-tight text-foreground">
+            Licenses &{" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Certifications
+            </span>
           </h2>
-          <p className="text-foreground/70 max-w-xl text-sm md:text-base">
+
+          <p className="mt-3 max-w-xl text-sm md:text-base text-foreground/70 leading-relaxed">
             Verified professional credentials, specialized training paths, and engineering milestones achieved.
           </p>
         </div>
@@ -88,7 +92,6 @@ export const CertificationsSection = () => {
               key={index}
               className="gradient-border group rounded-2xl border border-border/40 bg-card overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1"
             >
-              {/* Top Section: Visual Preview Media Layer */}
               <div>
                 <div className="relative aspect-video w-full bg-muted/30 overflow-hidden border-b border-border/20 flex items-center justify-center p-4 group-hover:bg-primary/5 transition-colors duration-300">
                   <div className="absolute inset-0 bg-linear-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
@@ -100,7 +103,6 @@ export const CertificationsSection = () => {
                   />
                 </div>
 
-                {/* Card Main Copy */}
                 <div className="p-6 space-y-3 text-left">
                   <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-primary">
                     <Calendar size={13} />
@@ -122,7 +124,6 @@ export const CertificationsSection = () => {
                 </div>
               </div>
 
-              {/* Bottom Section: Public Verification Call To Action */}
               <div className="p-6 pt-0 text-left">
                 <a
                   href={cert.verificationUrl}

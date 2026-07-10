@@ -12,6 +12,12 @@ const navItems = [
   { name: "Contact", href: "#contact" },
 ];
 
+const socialLinks = [
+  { key: "whatsapp", href: "https://wa.me/212634761182", icon: FaWhatsapp, size: 18, hover: "hover:text-emerald-500 hover:border-emerald-500/40 hover:bg-emerald-500/10" },
+  { key: "github", href: "https://github.com/SilverFangXk", icon: FaGithub, size: 16, hover: "hover:text-primary hover:border-primary/40 hover:bg-primary/10" },
+  { key: "linkedin", href: "https://linkedin.com/in/khadija-chkhichkh", icon: FaLinkedin, size: 18, hover: "hover:text-primary hover:border-primary/40 hover:bg-primary/10" },
+];
+
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,59 +40,65 @@ export const Navbar = () => {
           : "py-5"
       )}
     >
-      {/* Changed to flex and justify-between for immaculate distribution */}
-      <div className="w-100%  mx-auto flex  justify-between px-6">
+      <div className="w-full mx-auto flex justify-between items-center px-6">
 
         {/* 1. DESKTOP MENU (LEFT SIDE) */}
-        {/* LEFT MENU */}
-        <       div className="hidden md:flex flex-1 items-center gap-3">
+        <div className="hidden md:flex flex-1 items-center gap-1.5">
           {navItems.map((item, key) => (
             <a
               key={key}
               href={item.href}
-              className="group relative px-4 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-primary hover:bg-primary/10 transition-all duration-300"
+              className="group relative px-3.5 py-1.5 rounded-full border border-transparent text-xs font-mono uppercase tracking-wide text-foreground/70 hover:text-primary hover:bg-primary/10 hover:border-primary/20 transition-all duration-300"
             >
               {item.name}
-              {/* Animated bottom indicator line */}
-              <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             </a>
           ))}
         </div>
 
-        {/* 2. NAME (CENTER PIECE) */}
+        {/* 2. NAME (CENTER PIECE) — monospace now, echoing the code/terminal
+            accents used across the rest of the site (git-log, JSON, pills) */}
         <div className="flex flex-1 justify-center">
           <a
             href="#hero"
-            className="text-xl font-bold text-primary flex items-center tracking-tight select-none"
+            className="flex items-center tracking-tight select-none"
           >
-            <span className="relative z-10">
-              <span className="text-glow font-carter text-4xl">Khadija Chkhichkh</span>
-            </span>
+            <span className="relative z-10 font-mono font-black text-xl md:text-3xl tracking-tighter">
+  <span className="text-foreground/40">{"<"}</span>
+  <span className="text-foreground">Khadija</span>
+  <span className="text-foreground/40">.</span>
+  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+    Chkhichkh
+  </span>
+  <span className="text-foreground/40">{" />"}</span>
+</span>
           </a>
         </div>
 
-
         {/* 3. SOCIALS (RIGHT SIDE) */}
-        <div className="hidden md:flex flex-1 items-center justify-end gap-4">
-          <a href="https://wa.me/212634761182" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-emerald-500 transition-colors p-2 hover:bg-emerald-500/10 rounded-full">
-            <FaWhatsapp size={24} />
-          </a>
-          <a href="https://github.com/SilverFangXk" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
-            <FaGithub size={19} />
-          </a>
-          <a href="https://linkedin.com/in/khadija-chkhichkh" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
-            <FaLinkedin size={24} />
-          </a>
-
+        <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+          {socialLinks.map(({ key, href, icon: Icon, size, hover }) => (
+            <a
+              key={key}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(
+                "flex items-center justify-center w-9 h-9 rounded-full border border-border/40 text-foreground/70 transition-all duration-300",
+                hover
+              )}
+            >
+              <Icon size={size} />
+            </a>
+          ))}
         </div>
 
         {/* MOBILE MENU TOGGLE BUTTON */}
         <div className="flex md:hidden items-center">
           <button
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="p-2 text-foreground z-50 rounded-md hover:bg-primary/10 transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-full border border-border/40 text-foreground z-50 hover:bg-primary/10 hover:border-primary/20 transition-colors"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
@@ -100,13 +112,12 @@ export const Navbar = () => {
               : "opacity-0 pointer-events-none"
           )}
         >
-          {/* Mobile Links */}
-          <div className="flex flex-col space-y-4 text-center w-full max-w-xs">
+          <div className="flex flex-col items-center gap-2 w-full max-w-xs">
             {navItems.map((item, key) => (
               <a
                 key={key}
                 href={item.href}
-                className="block text-2xl font-semibold px-6 py-3 rounded-xl text-foreground/80 hover:text-primary hover:bg-primary/10 transition-all"
+                className="w-full text-center text-sm font-mono uppercase tracking-wide px-6 py-3 rounded-full border border-transparent text-foreground/80 hover:text-primary hover:bg-primary/10 hover:border-primary/20 transition-all"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
@@ -116,17 +127,21 @@ export const Navbar = () => {
 
           <hr className="w-1/3 border-border" />
 
-          {/* Mobile Socials */}
-          <div className="flex space-x-6">
-            <a href="https://wa.me/212634761182" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-emerald-500 transition-colors p-2 hover:bg-emerald-500/10 rounded-full">
-              <FaWhatsapp size={24} />
-            </a>
-            <a href="https://github.com/SilverFangXk" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
-              <FaGithub size={19} />
-            </a>
-            <a href="https://linkedin.com/in/khadija-chkhichkh" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-primary transition-colors p-2 hover:bg-primary/10 rounded-full">
-              <FaLinkedin size={24} />
-            </a>
+          <div className="flex gap-3">
+            {socialLinks.map(({ key, href, icon: Icon, size, hover }) => (
+              <a
+                key={key}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                className={cn(
+                  "flex items-center justify-center w-11 h-11 rounded-full border border-border/40 text-foreground/70 transition-all duration-300",
+                  hover
+                )}
+              >
+                <Icon size={size + 2} />
+              </a>
+            ))}
           </div>
         </div>
 
