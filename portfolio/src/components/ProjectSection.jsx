@@ -1,7 +1,7 @@
 import { ExternalLink, Tag } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 // Import your project screenshots here (only for projects that have a real image)
-import projectOneImg from "/pic1.png";
+import projectOneImg from "/image.png";
 import Calculator from "/calculator.png";
 import pum from "/pum.png";
 import sncfPipeline from "/sncf-bi-pipeline.svg";
@@ -18,7 +18,7 @@ export const ProjectsSection = () => {
       title: "Personal Portfolio Website",
       techStack: ["React", "Vite", "Tailwind CSS", "JavaScript", "Lucide React"],
       image: projectOneImg,
-      description: "Designed and built this portfolio from scratch — a React + Tailwind site with a git-log/ETL-pipeline themed hero, a terminal-style experience log, and an interactive skills dashboard, all animated and fully responsive.",
+      description: "Designed and built this portfolio from scratch a React + Tailwind site with a git-log/ETL-pipeline themed hero, a terminal-style experience log, and an interactive skills dashboard, all animated and fully responsive.",
       githubUrl: "https://github.com/yourusername/portfolio", // update with your actual repo
       demoUrl: null // set to your live portfolio URL once deployed, or remove if this page is the demo
     },
@@ -28,7 +28,7 @@ export const ProjectsSection = () => {
       image: pum,
       description: "Developed a machine learning model to predict user behavior patterns, achieving 92% accuracy on historical datasets.",
       githubUrl: "https://github.com/SilverFangXk/Pum",
-      demoUrl: "https://pum-nine.vercel.app/" // Set to null if no live demo exists
+      demoUrl: null// Set to null if no live demo exists
     },
     {
       title: "AI-Powered Desktop Calculator",
