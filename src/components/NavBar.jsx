@@ -5,14 +5,13 @@ import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
 const navItems = [
   { name: "About", href: "#about" },
-  { name: "Experience", href: "#experience" },
   { name: "Education", href: "#education" },
   { name: "Skills", href: "#skills" },
+  { name: "ACHIEVEMENTS", href: "#certifications" },
   { name: "Projects", href: "#projects" },
-  { name: "Certifications", href: "#certifications" },
-  { name: "Behind Data", href: "#behind-data" },
   { name: "Contact", href: "#contact" },
 ];
+
 const socialLinks = [
   { key: "whatsapp", href: "https://wa.me/212634761182", icon: FaWhatsapp, size: 18, hover: "hover:text-emerald-500 hover:border-emerald-500/40 hover:bg-emerald-500/10" },
   { key: "github", href: "https://github.com/SilverFangXk", icon: FaGithub, size: 16, hover: "hover:text-primary hover:border-primary/40 hover:bg-primary/10" },
