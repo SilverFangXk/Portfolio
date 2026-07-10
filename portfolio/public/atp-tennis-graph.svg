@@ -1,0 +1,57 @@
+<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgAtp" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <marker id="arrowAtp" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#818cf8"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="320" fill="url(#bgAtp)"/>
+
+  <!-- CSV -->
+  <g>
+    <rect x="90" y="115" width="140" height="90" rx="12" fill="#1e1b4b" stroke="#4338ca" stroke-width="2"/>
+    <text x="160" y="167" text-anchor="middle" fill="#c7d2fe" font-family="Arial, sans-serif" font-size="17" font-weight="bold">CSV</text>
+  </g>
+  <line x1="230" y1="160" x2="276" y2="160" stroke="#818cf8" stroke-width="3" marker-end="url(#arrowAtp)"/>
+
+  <!-- Spark -->
+  <g>
+    <rect x="281" y="115" width="140" height="90" rx="12" fill="#3730a3" stroke="#818cf8" stroke-width="2"/>
+    <text x="351" y="167" text-anchor="middle" fill="#e0e7ff" font-family="Arial, sans-serif" font-size="17" font-weight="bold">Spark</text>
+  </g>
+
+  <!-- split lines to GraphX (top) and GraphFrames (bottom) -->
+  <line x1="421" y1="160" x2="450" y2="160" stroke="#818cf8" stroke-width="3"/>
+  <line x1="450" y1="160" x2="450" y2="90" stroke="#818cf8" stroke-width="3"/>
+  <line x1="450" y1="90" x2="496" y2="90" stroke="#818cf8" stroke-width="3" marker-end="url(#arrowAtp)"/>
+  <line x1="450" y1="160" x2="450" y2="230" stroke="#818cf8" stroke-width="3"/>
+  <line x1="450" y1="230" x2="496" y2="230" stroke="#818cf8" stroke-width="3" marker-end="url(#arrowAtp)"/>
+
+  <!-- GraphX (top path) -->
+  <g>
+    <rect x="501" y="45" width="150" height="90" rx="12" fill="#1e1b4b" stroke="#4338ca" stroke-width="2"/>
+    <text x="576" y="97" text-anchor="middle" fill="#c7d2fe" font-family="Arial, sans-serif" font-size="16" font-weight="bold">GraphX</text>
+  </g>
+
+  <!-- GraphFrames (bottom path) -->
+  <g>
+    <rect x="501" y="185" width="150" height="90" rx="12" fill="#1e1b4b" stroke="#4338ca" stroke-width="2"/>
+    <text x="576" y="237" text-anchor="middle" fill="#c7d2fe" font-family="Arial, sans-serif" font-size="15" font-weight="bold">GraphFrames</text>
+  </g>
+
+  <!-- merge lines from GraphX and GraphFrames to PageRank -->
+  <line x1="651" y1="90" x2="710" y2="90" stroke="#818cf8" stroke-width="3"/>
+  <line x1="710" y1="90" x2="710" y2="160" stroke="#818cf8" stroke-width="3"/>
+  <line x1="651" y1="230" x2="710" y2="230" stroke="#818cf8" stroke-width="3"/>
+  <line x1="710" y1="230" x2="710" y2="160" stroke="#818cf8" stroke-width="3"/>
+  <line x1="710" y1="160" x2="756" y2="160" stroke="#818cf8" stroke-width="3" marker-end="url(#arrowAtp)"/>
+
+  <!-- PageRank -->
+  <g>
+    <rect x="761" y="115" width="150" height="90" rx="12" fill="#312e81" stroke="#facc15" stroke-width="2"/>
+    <text x="836" y="167" text-anchor="middle" fill="#fde68a" font-family="Arial, sans-serif" font-size="17" font-weight="bold">PageRank</text>
+  </g>
+</svg>
