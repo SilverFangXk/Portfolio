@@ -7,13 +7,13 @@ import {
   SiApachehadoop,
   SiApachekafka,
   SiPython,
-  SiR,
   SiTensorflow,
   SiDocker,
   SiPostgresql,
   SiMysql,
   SiScikitlearn,
-  SiMongodb
+  SiMongodb,
+  SiNodedotjs
 } from "react-icons/si";
 
 import {
@@ -22,16 +22,22 @@ import {
   Cloud,
   Globe,
   BarChart3,
-  Server,
-  Terminal
+  Terminal,
+  Network
 } from "lucide-react";
 import { IoLogoJavascript } from "react-icons/io";
+
 export const SkillsSection = () => {
-  // 1. Core Data structure containing your fields, icons, and individual skills
+  // 1. Core data structure containing your fields, icons, and individual skills.
+  // Each field now carries a `color` key ("primary" | "secondary" | "accent" | "purple" | "rose")
+  // instead of a hardcoded Tailwind color, so the whole tree follows the site palette.
+  // Individual skill icons keep their real brand colors (Java orange, Docker blue, etc.) —
+  // those are recognizable logos, not decorative accents, so they're left as-is.
   const skillTreeData = [
     {
       field: "DATA ENGINEERING",
-      icon: <Database className="h-5 w-5 text-sky-400" />,
+      color: "primary",
+      icon: <Database className="h-5 w-5" />,
       skills: [
         { name: "Java", icon: <FaJava className="text-orange-400" /> },
         { name: "Apache Spark", icon: <SiApachespark className="text-orange-500" /> },
@@ -40,29 +46,24 @@ export const SkillsSection = () => {
         { name: "ETL Pipelines", icon: <Terminal className="text-emerald-400" /> }
       ]
     },
-
     {
       field: "ARTIFICIAL INTELLIGENCE",
-      icon: <Brain className="h-5 w-5 text-emerald-400" />,
+      color: "accent",
+      icon: <Brain className="h-5 w-5" />,
       skills: [
         { name: "Python", icon: <SiPython className="text-yellow-400" /> },
-
-        // Python Data Stack (grouped cleanly)
         { name: "NumPy / Pandas", icon: <IoStatsChart className="text-blue-400" /> },
         { name: "Matplotlib / Seaborn", icon: <IoStatsChart className="text-purple-400" /> },
-
-        // ML & AI
         { name: "Scikit-learn", icon: <SiScikitlearn className="text-green-400" /> },
         { name: "TensorFlow", icon: <SiTensorflow className="text-orange-400" /> },
-
-        // Concept-level skill (important for recruiters)
+        { name: "Deep Learning", icon: <Network className="text-pink-400" /> },
         { name: "Machine Learning Models", icon: <Brain className="text-emerald-400" /> }
       ]
     },
-
     {
       field: "CLOUD & DEVOPS",
-      icon: <Cloud className="h-5 w-5 text-indigo-400" />,
+      color: "purple",
+      icon: <Cloud className="h-5 w-5" />,
       skills: [
         { name: "AWS", icon: <FaAws className="text-orange-400" /> },
         { name: "Docker", icon: <SiDocker className="text-blue-400" /> },
@@ -72,26 +73,32 @@ export const SkillsSection = () => {
     },
     {
       field: "DATABASES",
-      icon: <Database className="h-5 w-5 text-amber-400" />,
+      color: "secondary",
+      icon: <Database className="h-5 w-5" />,
       skills: [
         { name: "PostgreSQL", icon: <SiPostgresql className="text-blue-400" /> },
         { name: "MySQL", icon: <SiMysql className="text-yellow-400" /> },
+        { name: "SQL Server", icon: <Database className="text-red-400" /> },
+        { name: "Oracle", icon: <Database className="text-red-600" /> },
         { name: "MongoDB", icon: <SiMongodb className="text-green-400" /> }
       ]
     },
-
     {
       field: "BUSINESS INTELLIGENCE",
-      icon: <BarChart3 className="h-5 w-5 text-purple-400" />,
+      color: "rose",
+      icon: <BarChart3 className="h-5 w-5" />,
       skills: [
         { name: "Power BI", icon: <IoStatsChart className="text-yellow-500" /> },
         { name: "Tableau", icon: <IoLogoTableau className="text-indigo-400" /> }
       ]
-    }, {
+    },
+    {
       field: "WEB DEVELOPMENT",
-      icon: <Globe className="h-5 w-5 text-blue-400" />,
+      color: "primary",
+      icon: <Globe className="h-5 w-5" />,
       skills: [
         { name: "React.js", icon: <FaReact className="text-cyan-400" /> },
+        { name: "Node.js", icon: <SiNodedotjs className="text-green-500" /> },
         { name: "Flask", icon: <FiServer className="text-gray-300" /> },
         { name: "HTML", icon: <FaHtml5 className="text-orange-400" /> },
         { name: "CSS", icon: <FaCss3Alt className="text-blue-300" /> },
@@ -99,83 +106,91 @@ export const SkillsSection = () => {
         { name: "PHP", icon: <FaPhp className="text-purple-400" /> }
       ]
     }
-  ];;
-  return (
-    <section id="skills" className="py-24 px-4 relative bg-background overflow-hidden w-full min-h-screen flex items-center justify-center">
+  ];
 
-      {/* Background Soft Blue/Purple Ambient Glow */}
-      <div className="absolute inset-0 bg-radial from-blue-500/5 via-transparent to-transparent pointer-events-none blur-3xl" />
+  // Maps each color key to the Tailwind classes the branch card + icon badge need.
+  // Written explicitly (not string-interpolated) so Tailwind's compiler picks up every class.
+  const colorStyles = {
+    primary: { icon: "text-primary", ring: "border-primary/50 shadow-primary/10", iconBg: "bg-primary/10", hover: "hover:bg-primary/5 hover:border-primary/40" },
+    secondary: { icon: "text-secondary", ring: "border-secondary/50 shadow-secondary/10", iconBg: "bg-secondary/10", hover: "hover:bg-secondary/5 hover:border-secondary/40" },
+    accent: { icon: "text-accent", ring: "border-accent/50 shadow-accent/10", iconBg: "bg-accent/10", hover: "hover:bg-accent/5 hover:border-accent/40" },
+    purple: { icon: "text-purple", ring: "border-purple/50 shadow-purple/10", iconBg: "bg-purple/10", hover: "hover:bg-purple/5 hover:border-purple/40" },
+    rose: { icon: "text-rose", ring: "border-rose/50 shadow-rose/10", iconBg: "bg-rose/10", hover: "hover:bg-rose/5 hover:border-rose/40" }
+  };
+
+  // Actual hex values matching the current palette's HSL tokens, used only for the SVG
+  // gradient stops below (SVG stop-color doesn't reliably resolve CSS custom properties
+  // across all renderers, so this stays as a literal gradient tied to the same hues).
+  const svgGradientStops = [
+    { offset: "0%", color: "hsl(19, 100%, 62%)" },   // primary
+    { offset: "35%", color: "hsl(33, 86%, 63%)" },    // accent
+    { offset: "70%", color: "hsl(265, 40%, 55%)" },   // purple
+    { offset: "100%", color: "hsl(335, 55%, 55%)" }   // rose
+  ];
+
+  return (
+    <section id="skills" className="py-24 px-4 relative overflow-hidden w-full min-h-screen flex items-center justify-center">
+
+      {/* Background ambient glow, now pulling from primary/accent instead of hardcoded blue */}
+      <div className="absolute inset-0 bg-radial from-primary/5 via-transparent to-transparent pointer-events-none blur-3xl" />
 
       <div className="container mx-auto max-w-6xl relative z-10 flex flex-col items-center">
 
-        {/* ==================== LEVEL 1: ROOT NODE ==================== */}
-        <div className="relative mb-20 md:mb-28 group">
-          <div className="absolute inset-0 rounded-xl bg-linear-to-r from-blue-500 to-indigo-500 opacity-30 blur-md group-hover:opacity-50 transition-opacity duration-500" />
-          <div className="relative px-8 py-4 bg-card/60 backdrop-blur-md border border-primary/50 rounded-xl shadow-xl shadow-primary/10 text-center">
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-widest text-foreground uppercase">
-              My <span className="text-primary">Skills</span>
-            </h2>
+        {/* ==================== SECTION HEADER — matches Hero / About / Experience / Education ==================== */}
+        <div className="flex flex-col items-center text-center mb-20 md:mb-28">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 font-mono text-[11px] text-foreground/80">
+            <span className="h-1.5 w-1.5 animate-pulse-subtle rounded-full bg-primary" />
+            MySkills.renderer()
           </div>
+
+          <h2 className="mt-6 text-3xl md:text-4xl font-black tracking-tight text-foreground">
+            My{" "}
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Skills
+            </span>
+          </h2>
         </div>
-
-        {/* These draw glowing paths behind the elements linking them like a digital tree blueprint */}
-        {/* ==================== SVG CONNECTOR (UPDATED FOR 5 NODES) ==================== */}
-       <div className="absolute top-[-90px] left-0 w-full h-[270px] hidden md:block pointer-events-none z-30">
-  <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="rgba(59, 130, 246, 0.7)" />
-        <stop offset="50%" stopColor="rgba(99, 102, 241, 0.7)" />
-        <stop offset="100%" stopColor="rgba(139, 92, 246, 0.7)" />
-      </linearGradient>
-    </defs>
-
-    {/* 6 branches — une par colonne */}
-    <path d="M 576 160 L 80  280" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
-    <path d="M 576 160 L 260 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
-    <path d="M 576 160 L 480 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
-    <path d="M 576 160 L 690 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
-    <path d="M 576 160 L 920 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
-    <path d="M 576 160 L 1160 290" stroke="url(#glowGrad)" strokeWidth="2.2" fill="none"/>
-  </svg>
-</div>
 
         {/* ==================== LEVEL 2 & 3: BRANCHES AND LEAVES ==================== */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 w-full">
-          {skillTreeData.map((branch, bIdx) => (
-            <div key={bIdx} className="flex flex-col items-center space-y-6 w-full">
+          {skillTreeData.map((branch, bIdx) => {
+            const c = colorStyles[branch.color];
+            return (
+              <div key={bIdx} className="flex flex-col items-center space-y-6 w-full">
 
-              {/* FIELD TITLE */}
-              <div className={`relative px-5 py-3 bg-card border border-border/60 rounded-xl shadow-lg ${branch.glowColor} transition-transform duration-300 hover:scale-105 w-full max-w-[240px] text-center z-20`}>
-                <div className="flex items-center justify-center gap-3">
-                  <div className="shrink-0 p-1.5 rounded-lg bg-foreground/5">
-                    {branch.icon}
-                  </div>
-                  <h3 className="font-bold text-xs tracking-wide text-foreground">
-                    {branch.field}
-                  </h3>
-                </div>
-              </div>
-
-              {/* SKILLS */}
-              <div className="flex flex-col gap-3 w-full max-w-[240px]">
-                {branch.skills.map((skill, sIdx) => (
-                  <div
-                    key={sIdx}
-                    className="group flex items-center gap-3 px-4 py-2.5 bg-card/40 backdrop-blur-xs border border-border/40 rounded-xl shadow-xs transition-all duration-300 hover:bg-primary/5 hover:border-primary/40 hover:-translate-y-0.5"
-                  >
-                    <div className="p-2 rounded-lg bg-background border border-border/50 group-hover:border-primary/30">
-                      {skill.icon}
+                {/* FIELD TITLE — border/shadow now driven by branch.color instead of the
+                    undefined branch.glowColor that was silently doing nothing before */}
+                <div className={`relative px-5 py-3 bg-card border rounded-xl shadow-lg ${c.ring} transition-transform duration-300 hover:scale-105 w-full max-w-[240px] text-center z-20`}>
+                  <div className="flex items-center justify-center gap-3">
+                    <div className={`shrink-0 p-1.5 rounded-lg ${c.iconBg} ${c.icon}`}>
+                      {branch.icon}
                     </div>
-                    <span className="text-sm text-foreground/85">
-                      {skill.name}
-                    </span>
+                    <h3 className="font-bold text-xs tracking-wide text-foreground">
+                      {branch.field}
+                    </h3>
                   </div>
-                ))}
-              </div>
+                </div>
 
-            </div>
-          ))}
+                {/* SKILLS */}
+                <div className="flex flex-col gap-3 w-full max-w-[240px]">
+                  {branch.skills.map((skill, sIdx) => (
+                    <div
+                      key={sIdx}
+                      className={`group flex items-center gap-3 px-4 py-2.5 bg-card/40 backdrop-blur-xs border border-border/40 rounded-xl shadow-xs transition-all duration-300 ${c.hover} hover:-translate-y-0.5`}
+                    >
+                      <div className="p-2 rounded-lg bg-background border border-border/50">
+                        {skill.icon}
+                      </div>
+                      <span className="text-sm text-foreground/85">
+                        {skill.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            );
+          })}
         </div>
 
       </div>
