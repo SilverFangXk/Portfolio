@@ -313,7 +313,7 @@ const Widget = ({ icon: Icon, label, className = "", children }) => (
 export const BehindTheDataSection = () => {
   return (
     <section
-      id="interests"
+      id="behind-data"
       className="relative px-6 py-14 md:px-12 lg:px-20 flex flex-col items-center"
     >
       <div className="w-full max-w-3xl mx-auto">
