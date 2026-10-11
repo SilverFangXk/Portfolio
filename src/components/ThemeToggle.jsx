@@ -33,7 +33,7 @@ export const ThemeToggle = () => {
       onClick={toggleTheme} 
       className={cn(
         // Changes applied below for the floating action look
-        "fixed bottom-6 right-6 z-50 p-3 rounded-full shadow-lg transition-all duration-300",
+        "fixed bottom-6 left-6 z-50 p-3 rounded-full shadow-lg transition-all duration-300",
         "bg-background border border-border/40 hover:scale-110 active:scale-95",
         "focus:outline-none" // Fixed the typo here
       )}

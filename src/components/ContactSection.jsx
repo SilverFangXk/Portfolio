@@ -1,36 +1,96 @@
-import { useState } from "react";
-import { Mail, Phone, MapPin, Send, User, AtSign, MessageSquare, Check } from "lucide-react";
+import { useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { Mail, Phone, MapPin, Send, User, AtSign, MessageSquare, Check, AlertCircle } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
-import profilePic from "../assets/profile.jpeg";
+
+import { optimized } from "../lib/Cloudinary";
+import { getSettings } from "../lib/contentDb";
+import { DEFAULT_CONTACT } from "../lib/defaultContent";
+
+// Values come from admin -> Contact (Firestore), with DEFAULT_CONTACT as the fallback.
+
+const CONTACT_CSS = `
+@keyframes cp-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+@media (prefers-reduced-motion: reduce) { .cp-orb { animation: none !important; } }
+`;
+
+// Cloudinary links get resized; local files (/meB.jpeg) are used as they are
+const photoSrc = (u) => (/^https?:\/\//i.test(u) ? optimized(u, 600) : u);
 
 export const ContactSection = () => {
-  const [status, setStatus] = useState("idle"); // idle | sending | sent
+  const [saved, setSaved] = useState(null); // null = still loading
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [slide, setSlide] = useState(0);
 
-  const handleMessageSubmit = (e) => {
+  useEffect(() => {
+    let alive = true;
+    getSettings("contact")
+      .then((d) => alive && setSaved(d ?? {}))
+      .catch(() => alive && setSaved({}));
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const loaded = saved !== null;
+  const data = { ...DEFAULT_CONTACT, ...(saved ?? {}) };
+
+  const email = (data.email || DEFAULT_CONTACT.email).trim();
+  const phone = (data.phone || DEFAULT_CONTACT.phone).trim();
+  const location = (data.location || DEFAULT_CONTACT.location).trim();
+
+  const linkedinRaw = (data.linkedin || DEFAULT_CONTACT.linkedin).trim();
+  const linkedinUrl = /^https?:\/\//i.test(linkedinRaw)
+    ? linkedinRaw
+    : `https://linkedin.com/in/${linkedinRaw.replace(/^\/+|\/+$/g, "")}`;
+  const linkedinHandle = linkedinUrl
+    .replace(/^https?:\/\/(www\.)?linkedin\.com\/(in\/)?/i, "")
+    .replace(/\/+$/, "");
+
+  const savedPics = (Array.isArray(data.photos) ? data.photos : [])
+    .map((p) => (typeof p === "string" ? p : p?.url))
+    .filter(Boolean);
+  const pics = savedPics.length ? savedPics : DEFAULT_CONTACT.photos.map((p) => p.url);
+
+  // wait for Firestore before showing editable values, so the defaults never flash first
+  const fade = `transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`;
+
+  // slideshow (only when there is more than one photo)
+  useEffect(() => {
+    setSlide(0);
+    if (pics.length < 2) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setSlide((n) => (n + 1) % pics.length), 3500);
+    return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pics.length]);
+
+  const handleMessageSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get("user_name");
-    const email = formData.get("user_email");
-    const message = formData.get("user_message");
-
-    if (!name || !email || !message) return;
-
-    const mailtoUri = `mailto:your.email@example.com?subject=Portfolio Message from ${encodeURIComponent(name)}&body=Sender Email: ${encodeURIComponent(email)}%0A%0AMessage:%0A${encodeURIComponent(message)}`;
+    const form = e.currentTarget; // grab before the await
 
     setStatus("sending");
-    setTimeout(() => {
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        form,
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
       setStatus("sent");
-      window.location.href = mailtoUri;
-      setTimeout(() => setStatus("idle"), 3000);
-    }, 600);
+      form.reset();
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setStatus("error");
+    }
+    setTimeout(() => setStatus("idle"), 5000);
   };
 
   const contactPoints = [
-    { key: "email", icon: Mail, label: "Email", value: "khadijachkhichkh1@gmail.com", href: "mailto:khadijachkhichkh1@gmail.com", color: "primary" },
-    { key: "phone", icon: Phone, label: "Phone", value: "+212 6 34 76 11 82", href: "tel:+212634761182", color: "accent" },
-    { key: "linkedin", icon: FaLinkedin, label: "LinkedIn", value: "khadija-chkhichkh", href: "https://linkedin.com/in/khadija-chkhichkh", color: "purple" },
-    { key: "location", icon: MapPin, label: "Based in", value: "Khémisset, Morocco", href: null, color: "rose" },
+    { key: "email", icon: Mail, label: "Email", value: email, href: `mailto:${email}`, color: "primary" },
+    { key: "phone", icon: Phone, label: "Phone", value: phone, href: `tel:${phone.replace(/[^\d+]/g, "")}`, color: "accent" },
+    { key: "linkedin", icon: FaLinkedin, label: "LinkedIn", value: linkedinHandle, href: linkedinUrl, color: "purple" },
+    { key: "location", icon: MapPin, label: "Based in", value: location, href: null, color: "rose" },
   ];
 
   const colorStyles = {
@@ -43,16 +103,15 @@ export const ContactSection = () => {
   const fields = [
     { name: "user_name", type: "text", label: "Your name", icon: User },
     { name: "user_email", type: "email", label: "Email address", icon: AtSign },
+    { name: "user_subject", type: "text", label: "Subject", icon: Mail },
   ];
 
   return (
     <section id="contact" className="py-24 px-6 relative overflow-hidden">
-
-      {/* Ambient glow, soft and warm rather than sharp */}
+      <style>{CONTACT_CSS}</style>
       <div className="absolute inset-0 bg-radial from-primary/5 via-transparent to-transparent pointer-events-none blur-3xl" />
 
       <div className="container mx-auto max-w-6xl relative z-10">
-
         {/* Section Header */}
         <div className="flex flex-col items-center mb-16 text-center">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 font-mono text-[11px] text-foreground/80">
@@ -73,18 +132,15 @@ export const ContactSection = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-
-          {/* ==================== LEFT: illustrated orbit of contact points ==================== */}
+          {/* LEFT: orbit of contact points */}
           <div className="lg:col-span-5 flex flex-col items-center">
-
             <div className="relative w-full max-w-sm aspect-square flex items-center justify-center">
-
-              {/* Concentric rings, purely decorative */}
+              {/* rings */}
               <div className="absolute inset-0 rounded-full border border-border/30" />
-              <div className="absolute inset-[12%] rounded-full border border-border/20" />
-              <div className="absolute inset-[24%] rounded-full border border-dashed border-primary/20 animate-[spin_60s_linear_infinite]" />
+              <div className="absolute inset-[10%] rounded-full border border-border/20" />
+              <div className="absolute inset-[22%] rounded-full border border-dashed border-primary/30 animate-[spin_60s_linear_infinite]" />
 
-              {/* Satellite dots tracing the rings, reinforce the "signal" idea */}
+              {/* travelling dots */}
               <div className="absolute inset-0 animate-[spin_14s_linear_infinite]">
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent" />
               </div>
@@ -92,18 +148,39 @@ export const ContactSection = () => {
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-purple/70" />
               </div>
 
-              {/* Center — your photo, ringed and gently pulsing */}
-              <div className="relative z-10 w-28 h-28 rounded-full shadow-lg shadow-primary/20">
-                <span className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-primary to-secondary opacity-70 blur-[2px]" />
-                <span className="absolute -inset-1.5 rounded-full bg-primary/30 animate-ping opacity-40" />
-                <img
-                  src={profilePic}
-                  alt="Khadija Chkhichkh"
-                  className="relative w-full h-full rounded-full object-cover border-4 border-background"
-                />
+              {/* photo(s) */}
+              <div
+                className={`relative z-10 w-44 h-44 rounded-full overflow-hidden border-4 border-card ring-[3px] ring-primary/60 shadow-[0_12px_30px_-10px_var(--color-primary)] ${fade}`}
+              >
+                {pics.map((src, i) => (
+                  <img
+                    key={src + i}
+                    src={photoSrc(src)}
+                    alt={i === 0 ? "Khadija Chkhichkh" : ""}
+                    className={`absolute inset-0 h-full w-full object-cover object-[50%_24%] transition-opacity duration-700 ${
+                      i === slide ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                ))}
               </div>
 
-              {/* Orbiting contact bubbles, positioned by angle, staggered fade-in */}
+              {pics.length > 1 && (
+                <div className="absolute bottom-[23%] z-10 flex gap-2">
+                  {pics.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setSlide(i)}
+                      aria-label={`Photo ${i + 1}`}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        i === slide ? "w-5 bg-primary" : "w-2 bg-border hover:bg-foreground/30"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* floating contact points */}
               {contactPoints.map((point, i) => {
                 const angle = (360 / contactPoints.length) * i - 90;
                 const radius = 46;
@@ -116,8 +193,14 @@ export const ContactSection = () => {
                     href={point.href || undefined}
                     target={point.href?.startsWith("http") ? "_blank" : undefined}
                     rel="noopener noreferrer"
-                    className={`group absolute z-10 flex items-center justify-center w-14 h-14 rounded-full border shadow-sm transition-all duration-300 hover:scale-110 hover:-translate-y-1 animate-[fadeInScale_0.5s_ease-out_backwards] ${colorStyles[point.color]} ${!point.href ? "cursor-default" : "cursor-pointer"}`}
-                    style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)", animationDelay: `${i * 120}ms` }}
+                    aria-label={point.label}
+                    className={`cp-orb group absolute z-10 flex items-center justify-center w-14 h-14 rounded-full border shadow-sm transition-all duration-300 hover:scale-110 ${colorStyles[point.color]} ${!point.href ? "cursor-default" : "cursor-pointer"}`}
+                    style={{
+                      left: `${x}%`,
+                      top: `${y}%`,
+                      transform: "translate(-50%, -50%)",
+                      animation: `fadeInScale 0.5s ease-out ${i * 120}ms backwards, cp-float 4s ease-in-out ${600 + i * 800}ms infinite`,
+                    }}
                   >
                     <Icon size={20} />
                     <span className="absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 rounded-full bg-foreground text-background text-[10px] font-semibold opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 pointer-events-none">
@@ -128,8 +211,7 @@ export const ContactSection = () => {
               })}
             </div>
 
-            {/* Legend list beneath the orbit, so values are still readable/copyable as text */}
-            <div className="mt-10 w-full max-w-sm space-y-3">
+            <div className={`mt-10 w-full max-w-sm space-y-3 ${fade}`}>
               {contactPoints.map((point) => {
                 const Icon = point.icon;
                 const row = (
@@ -154,7 +236,7 @@ export const ContactSection = () => {
             </div>
           </div>
 
-          {/* ==================== RIGHT: soft card with floating-label inputs ==================== */}
+          {/* RIGHT: form */}
           <form
             onSubmit={handleMessageSubmit}
             className="lg:col-span-7 gradient-border p-8 md:p-10 bg-card border border-border/40 rounded-3xl flex flex-col gap-6 text-left shadow-sm"
@@ -224,14 +306,28 @@ export const ContactSection = () => {
               {status === "sent" && (
                 <>
                   <Check size={15} />
-                  <span>Message ready — check your mail app</span>
+                  <span>Message sent, thank you!</span>
+                </>
+              )}
+              {status === "error" && (
+                <>
+                  <AlertCircle size={15} />
+                  <span>Failed to send</span>
                 </>
               )}
             </button>
+
+            {status === "error" && (
+              <p className="text-xs text-center text-foreground/70 -mt-2">
+                Something went wrong. Please email me directly at{" "}
+                <a href={`mailto:${email}`} className="text-primary underline">
+                  {email}
+                </a>
+                .
+              </p>
+            )}
           </form>
-
         </div>
-
       </div>
     </section>
   );

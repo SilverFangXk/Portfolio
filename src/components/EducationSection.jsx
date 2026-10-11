@@ -1,57 +1,72 @@
 import { Calendar, MapPin } from "lucide-react";
 
-export const EducationSection = () => {
-  // 1. Array holding your academic history data
-  // Each entry gets a color key so the timeline reads as a color-coded sequence
-  const educationData = [
-    {
-      degree: "Engineering Cycle in Big Data & Data Engineering",
-      school: "National School of Applied Sciences – Fès (ENSAF)",
-      location: "Fès, Morocco",
-      duration: "2024 - 2027",
-      description: "Currently specializing in data engineering, big data systems, machine learning, deep learning, web development, and exploratory data analysis (EDA).",
-      color: "primary"
-    },
-    {
-      degree: "Preparatory Cycle in Engineering Sciences",
-      school: "National School of Applied Sciences – Fès (ENSAF)",
-      location: "Fès, Morocco",
-      duration: "2022 - 2024",
-      description: "An intensive preparatory journey in mathematics, physics, algorithms, and programming (C language), with exposure to tools such as MATLAB and Simulink.",
-      color: "accent"
-    },
-    {
-      degree: "Baccalaureate in Mathematical Sciences (With Honors)",
-      school: "El Yassmine High School",
-      location: "Khémisset, Morocco",
-      duration: "Graduated 2022",
-      description: "Academic background in mathematics and physics, completed with a 'Mention Bien' distinction.",
-      color: "purple"
-    }
-  ];
+import { DEFAULT_EDUCATION } from "../lib/defaultContent";
+import { useCollection } from "../lib/useCollection";
 
-  // Maps the color key to the Tailwind classes each card needs.
-  // Kept explicit (not string-interpolated) so Tailwind's compiler can see every class.
-  const colorStyles = {
-    primary: {
-      dot: "border-primary bg-primary",
-      badge: "bg-primary/10 text-primary border-primary/20",
-      title: "group-hover:text-primary",
-      glow: "hover:shadow-primary/10"
-    },
-    accent: {
-      dot: "border-accent bg-accent",
-      badge: "bg-accent/10 text-accent border-accent/20",
-      title: "group-hover:text-accent",
-      glow: "hover:shadow-accent/10"
-    },
-    purple: {
-      dot: "border-purple bg-purple",
-      badge: "bg-purple/10 text-purple border-purple/20",
-      title: "group-hover:text-purple",
-      glow: "hover:shadow-purple/10"
-    }
-  };
+// Data comes from the admin (Firestore), with DEFAULT_EDUCATION as the fallback.
+// Edit it in admin -> Education (first time: "Import current data").
+
+// Maps the color key to the Tailwind classes each card needs.
+// Kept explicit (not string-interpolated) so Tailwind's compiler can see every class.
+const colorStyles = {
+  primary: {
+    dot: "border-primary bg-primary",
+    badge: "bg-primary/10 text-primary border-primary/20",
+    title: "group-hover:text-primary",
+    glow: "hover:shadow-primary/10",
+  },
+  accent: {
+    dot: "border-accent bg-accent",
+    badge: "bg-accent/10 text-accent border-accent/20",
+    title: "group-hover:text-accent",
+    glow: "hover:shadow-accent/10",
+  },
+  purple: {
+    dot: "border-purple bg-purple",
+    badge: "bg-purple/10 text-purple border-purple/20",
+    title: "group-hover:text-purple",
+    glow: "hover:shadow-purple/10",
+  },
+  secondary: {
+    dot: "border-secondary bg-secondary",
+    badge: "bg-secondary/10 text-secondary border-secondary/20",
+    title: "group-hover:text-secondary",
+    glow: "hover:shadow-secondary/10",
+  },
+  rose: {
+    dot: "border-rose bg-rose",
+    badge: "bg-rose/10 text-rose border-rose/20",
+    title: "group-hover:text-rose",
+    glow: "hover:shadow-rose/10",
+  },
+};
+
+// 2024 + 2027 -> "2024 - 2027", 2024 only -> "2024 - Present", 2022 only -> "Graduated 2022".
+// Older entries with a free-text "duration" still display.
+const getPeriod = (edu) => {
+  const start = String(edu.startYear ?? "").trim();
+  const end = String(edu.endYear ?? "").trim();
+  if (start && end) return `${start} - ${end}`;
+  if (start) return `${start} - Present`;
+  if (end) return `Graduated ${end}`;
+  return edu.duration || "";
+};
+
+const SchoolLine = ({ edu, className = "" }) => (
+  <h4 className={`flex items-center gap-2 text-sm font-semibold text-foreground/80 ${className}`}>
+    {edu.logo && (
+      <img
+        src={edu.logo}
+        alt=""
+        className="h-7 w-7 shrink-0 rounded-md border border-border/40 bg-background/60 object-contain p-0.5"
+      />
+    )}
+    <span>{edu.school}</span>
+  </h4>
+);
+
+export const EducationSection = () => {
+  const { items: educationData } = useCollection("education", DEFAULT_EDUCATION);
 
   return (
     <section id="education" className="py-24 px-8 relative overflow-hidden">
@@ -75,26 +90,32 @@ export const EducationSection = () => {
         {/* ==================== MOBILE: simple stacked list ==================== */}
         <div className="flex flex-col gap-8 md:hidden">
           {educationData.map((edu, index) => {
-            const c = colorStyles[edu.color];
+            const c = colorStyles[edu.color] ?? colorStyles.primary;
             return (
-              <div key={index} className={`gradient-border p-6 card-hover rounded-xl text-left space-y-3 shadow-xs ${c.glow}`}>
+              <div key={edu.id ?? index} className={`gradient-border p-6 card-hover rounded-xl text-left space-y-3 shadow-xs ${c.glow}`}>
                 <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-wider">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border ${c.badge}`}>
-                    <Calendar size={12} />
-                    {edu.duration}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-foreground/60 font-medium">
-                    <MapPin size={12} />
-                    {edu.location}
-                  </span>
+                  {getPeriod(edu) && (
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border ${c.badge}`}>
+                      <Calendar size={12} />
+                      {getPeriod(edu)}
+                    </span>
+                  )}
+                  {edu.location && (
+                    <span className="inline-flex items-center gap-1 text-foreground/60 font-medium">
+                      <MapPin size={12} />
+                      {edu.location}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-foreground leading-snug">{edu.degree}</h3>
-                  <h4 className="text-sm font-semibold text-foreground/80 mt-1">{edu.school}</h4>
+                  <SchoolLine edu={edu} className="mt-1" />
                 </div>
-                <p className="text-sm text-foreground/75 leading-relaxed pt-1 border-t border-border/20">
-                  {edu.description}
-                </p>
+                {edu.description && (
+                  <p className="text-sm text-foreground/75 leading-relaxed pt-1 border-t border-border/20">
+                    {edu.description}
+                  </p>
+                )}
               </div>
             );
           })}
@@ -108,14 +129,14 @@ export const EducationSection = () => {
 
           <div
             className="grid items-center relative"
-            style={{ gridTemplateColumns: `repeat(${educationData.length}, 1fr)` }}
+            style={{ gridTemplateColumns: `repeat(${Math.max(1, educationData.length)}, 1fr)` }}
           >
             {educationData.map((edu, index) => {
-              const c = colorStyles[edu.color];
+              const c = colorStyles[edu.color] ?? colorStyles.primary;
               const isTop = index % 2 === 0; // top, bottom, top ...
 
               return (
-                <div key={index} className="relative flex flex-col items-center min-h-[560px]">
+                <div key={edu.id ?? index} className="relative flex flex-col items-center min-h-[560px]">
 
                   {/* The dot, always anchored on the center spine */}
                   <div className="absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center">
@@ -135,27 +156,31 @@ export const EducationSection = () => {
                       }`}
                   >
                     <div className={`gradient-border p-6 card-hover rounded-xl text-left space-y-3 shadow-xs group ${c.glow}`}>
-                      <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-wider">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border ${c.badge}`}>
-                          <Calendar size={12} />
-                          {edu.duration}
-                        </span>
-                      </div>
+                      {getPeriod(edu) && (
+                        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold tracking-wider">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border ${c.badge}`}>
+                            <Calendar size={12} />
+                            {getPeriod(edu)}
+                          </span>
+                        </div>
+                      )}
                       <div>
                         <h3 className={`text-lg font-bold text-foreground leading-snug transition-colors duration-200 ${c.title}`}>
                           {edu.degree}
                         </h3>
-                        <h4 className="text-sm font-semibold text-foreground/80 mt-1">
-                          {edu.school}
-                        </h4>
-                        <span className="inline-flex items-center gap-1 text-xs text-foreground/60 font-medium mt-1">
-                          <MapPin size={11} />
-                          {edu.location}
-                        </span>
+                        <SchoolLine edu={edu} className="mt-1" />
+                        {edu.location && (
+                          <span className="inline-flex items-center gap-1 text-xs text-foreground/60 font-medium mt-1">
+                            <MapPin size={11} />
+                            {edu.location}
+                          </span>
+                        )}
                       </div>
-                      <p className="text-sm text-foreground/75 leading-relaxed pt-1 border-t border-border/20">
-                        {edu.description}
-                      </p>
+                      {edu.description && (
+                        <p className="text-sm text-foreground/75 leading-relaxed pt-1 border-t border-border/20">
+                          {edu.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

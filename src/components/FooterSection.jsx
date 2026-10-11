@@ -4,8 +4,9 @@ import {
   Heart,
   ArrowUpRight,
   Layers,
-  Code2,
   Database,
+  Cloud,
+  Sparkles,
 } from "lucide-react";
 
 import {
@@ -51,18 +52,10 @@ export const Footer = () => {
   ];
 
   const interestFields = [
-    {
-      name: "Data Architecture",
-      icon: <Database size={14} />,
-    },
-    {
-      name: "ETL / ELT Pipelines",
-      icon: <Layers size={14} />,
-    },
-    {
-      name: "Full-Stack Web Apps",
-      icon: <Code2 size={14} />,
-    },
+    { name: "Data Engineering", icon: <Database size={14} /> },
+    { name: "Big Data", icon: <Layers size={14} /> },
+    { name: "Cloud", icon: <Cloud size={14} /> },
+    { name: "AI", icon: <Sparkles size={14} /> },
   ];
 
   return (
@@ -71,7 +64,7 @@ export const Footer = () => {
 
       <div className="container mx-auto max-w-6xl space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start text-left">
-          
+
           {/* Focus Areas */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-widest text-foreground/60">
@@ -105,12 +98,12 @@ export const Footer = () => {
                 </span>
 
                 <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
-                  Actively Available
+                  ENSA Fès
                 </span>
               </div>
 
               <p className="text-xs text-foreground/70">
-                Open for Data Engineering roles and remote contract projects.
+                Available for PFE internships from January 2027
               </p>
             </div>
           </div>
@@ -122,23 +115,23 @@ export const Footer = () => {
             </h4>
 
             <div className="grid grid-cols-2 gap-3">
-  {contacts.map((item, idx) => (
-    <a
-      key={idx}
-      href={item.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`flex items-center justify-between px-4 py-3 rounded-xl border border-border/50 bg-card/50 text-xs font-medium text-foreground/70 transition-all hover:bg-secondary/20 ${item.color}`}
-    >
-      <div className="flex items-center gap-2">
-        {item.icon}
-        <span>{item.name}</span>
-      </div>
+              {contacts.map((item, idx) => (
+                <a
+                  key={idx}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl border border-border/50 bg-card/50 text-xs font-medium text-foreground/70 transition-all hover:bg-secondary/20 ${item.color}`}
+                >
+                  <div className="flex items-center gap-2">
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </div>
 
-      <ArrowUpRight size={14} className="opacity-50" />
-    </a>
-  ))}
-</div>
+                  <ArrowUpRight size={14} className="opacity-50" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -146,13 +139,14 @@ export const Footer = () => {
         <div className="pt-6 border-t border-border/10 flex flex-col sm:flex-row items-center justify-between text-[11px] text-foreground/40 gap-4">
           <p>© {currentYear} Khadija Chkhichkh. All Rights Reserved.</p>
 
-          <p className="flex items-center gap-1">
-            Engineered with{" "}
+          <p className="group flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium text-foreground/80 shadow-sm transition-all hover:border-primary/60 hover:bg-primary/15">
+            Engineered with
             <Heart
-              size={12}
-              className="text-primary fill-primary/30"
-            />{" "}
-            using React & Tailwind
+              size={15}
+              className="text-primary fill-primary animate-pulse transition-transform group-hover:scale-125"
+            />
+            using
+            <span className="font-semibold text-primary">React &amp; Tailwind</span>
           </p>
         </div>
       </div>

@@ -1,0 +1,48 @@
+.panda{--pm-pink:#E0709E}
+.panda .pn{--px:0;--py:0;--lid:.001;display:block;width:100%;height:auto;overflow:visible;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.panda .bob{animation:pm-bob 3.6s ease-in-out infinite}@keyframes pm-bob{50%{transform:translateY(-1.3px)}}
+.panda .sq{transform-origin:75px 60px;animation:pm-swy 5s ease-in-out infinite alternate}@keyframes pm-swy{from{rotate:-1.3deg}to{rotate:1.3deg}}
+.panda.bp .sq{animation:pm-sq .5s}@keyframes pm-sq{30%{transform:scale(1.09,.88)}60%{transform:scale(.97,1.05)}}
+.panda .hd{transform-origin:75px 58px;transition:transform .9s cubic-bezier(.4,0,.2,1)}
+.panda .pu{transform:translate(calc(var(--px)*1px),calc(var(--py)*1px));transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.panda .eye{transform-box:fill-box;transform-origin:center;animation:pm-bl 4.5s infinite}@keyframes pm-bl{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+.panda .lid{transform:scaleY(var(--lid));transition:transform .4s ease}.panda .lL{transform-origin:62px 30.8px}.panda .lR{transform-origin:88px 30.8px}
+.panda .bL,.panda .bR{transform-box:fill-box;transform-origin:center;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.panda .eL{transform-origin:46px 25px;animation:pm-tw 7s infinite;transition:transform .8s}.panda .eR{transform-origin:104px 25px;animation:pm-tw 9s 2s infinite;transition:transform .8s}
+@keyframes pm-tw{0%,90%,100%{transform:rotate(0)}93%{transform:rotate(-11deg)}96%{transform:rotate(4deg)}}
+.panda .bl{transform-box:fill-box;transform-origin:center;transition:transform .4s,opacity .4s}
+.panda .m{display:none}.panda .m-idle{display:block}
+.panda .lv,.panda .cl,.panda .cm,.panda .hp,.panda .rf,.panda .bm,.panda .sb{opacity:0;transition:opacity .6s}
+.panda .lv,.panda .sb{transform-box:fill-box;transform-origin:center}
+.panda .gl{stroke:#1b1214;stroke-width:1.8;fill:#fff;fill-opacity:.13;transition:fill .6s}
+.panda .sh{transition:transform .7s cubic-bezier(.4,0,.2,1)}
+.panda .pw{opacity:0;transform:translateY(22px);transition:transform .8s cubic-bezier(.4,0,.2,1),opacity .5s}.panda .pwL{transform-origin:61px 80px}.panda .pwR{transform-origin:89px 80px}
+.panda .ph,.panda .bkb{opacity:0;transform:translateY(18px);transition:transform .8s cubic-bezier(.4,0,.2,1),opacity .5s}
+.panda .fz{font:700 9px system-ui,sans-serif;animation:pm-fz 2.2s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes pm-fz{0%{opacity:0;transform:translate(0,0) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-34px) scale(1.2)}}
+.panda .fh{fill:#E0457B;animation:pm-fh 1.7s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes pm-fh{0%{opacity:0;transform:translate(0,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-34px) scale(1.2)}}
+/* moods */
+.panda [data-m=up]{--px:.2;--py:-1.5}.panda [data-m=up] .hd{transform:rotate(-5deg) translateY(-1px)}.panda [data-m=up] .bL,.panda [data-m=up] .bR{transform:translateY(-3px)}.panda [data-m=up] .m-o{display:block}
+.panda [data-m=sass]{--px:1.5;--py:.2;--lid:.5}.panda [data-m=sass] .hd{transform:rotate(7deg) translate(1px,1px)}.panda [data-m=sass] .bR{transform:translateY(-3.4px) rotate(-14deg)}.panda [data-m=sass] .bL{transform:translateY(1px) rotate(8deg)}.panda [data-m=sass] .m-smirk{display:block}
+.panda [data-m=hmph]{--px:-1.5;--py:-.4;--lid:.62}.panda [data-m=hmph] .hd{transform:rotate(-8deg) translateY(-2px)}.panda [data-m=hmph] .eL{transform:rotate(-14deg);animation:none}.panda [data-m=hmph] .eR{transform:rotate(14deg);animation:none}.panda [data-m=hmph] .bl{transform:scale(1.25)}.panda [data-m=hmph] .m-pout{display:block}
+.panda [data-m=roll]{--lid:.28}.panda [data-m=roll] .hd{transform:rotate(-2deg)}.panda [data-m=roll] .pu{animation:pm-roll 1.8s ease-in-out infinite}.panda [data-m=roll] .m-pout{display:block}
+@keyframes pm-roll{0%{transform:translate(0,0)}20%{transform:translate(-1.4px,-1.2px)}40%{transform:translate(0,-1.7px)}60%{transform:translate(1.4px,-1.1px)}80%{transform:translate(1.4px,.3px)}100%{transform:translate(0,0)}}
+.panda [data-m=love] .hd{transform:rotate(3deg) scale(1.03)}.panda [data-m=love] .pu{opacity:0}.panda [data-m=love] .lv{opacity:1;animation:pm-pl .5s ease-in-out infinite alternate}.panda [data-m=love] .bl{transform:scale(1.3);opacity:1}.panda [data-m=love] .m-love{display:block}
+@keyframes pm-pl{to{transform:scale(1.12)}}
+.panda [data-m=scroll]{--py:1.7;--lid:.15}.panda [data-m=scroll] .hd{transform:rotate(2deg) translateY(2px)}
+.panda [data-m=scroll] .ph,.panda [data-m=read] .bkb{opacity:1;transform:none}
+.panda [data-m=scroll] .pw,.panda [data-m=read] .pw{opacity:1;transform:none}
+.panda [data-m=scroll] .rf{opacity:1}.panda [data-m=scroll] .gl{fill:#9bd3ff;fill-opacity:.3}
+.panda [data-m=scroll] .bm{opacity:1;animation:pm-gw 1.4s ease-in-out infinite alternate}@keyframes pm-gw{from{opacity:.75}to{opacity:1}}
+.panda [data-m=read]{--lid:.18}.panda [data-m=read] .hd{transform:translateY(2px)}.panda [data-m=read] .pu{animation:pm-scan 1.8s ease-in-out infinite}
+@keyframes pm-scan{0%{transform:translate(-1.3px,1.5px)}70%,100%{transform:translate(1.3px,1.5px)}}
+.panda [data-m=shrug]{--lid:.38;--py:-.3}.panda [data-m=shrug] .hd{transform:rotate(-5deg) translateY(3px)}.panda [data-m=shrug] .sh{transform:translateY(-8px)}
+.panda [data-m=shrug] .bL,.panda [data-m=shrug] .bR{transform:translateY(-3px)}.panda [data-m=shrug] .m-pout{display:block}
+.panda [data-m=shrug] .pwL{opacity:1;transform:translate(-32px,2px) rotate(-18deg)}.panda [data-m=shrug] .pwR{opacity:1;transform:translate(32px,2px) rotate(18deg)}
+.panda [data-m=music]{--lid:1}.panda [data-m=music] .hp,.panda [data-m=music] .cm{opacity:1}.panda [data-m=music] .bl{transform:scale(1.2)}
+.panda [data-m=music] .sq{animation:pm-bobm .7s ease-in-out infinite alternate}@keyframes pm-bobm{from{rotate:-4deg;translate:0 0}to{rotate:4deg;translate:0 2.5px}}
+.panda [data-m=sleep]{--lid:1;--py:0}.panda [data-m=sleep] .cl{opacity:1}.panda [data-m=sleep] .hd{transform:rotate(9deg) translate(2px,3px)}.panda [data-m=sleep] .m-o{display:block}
+.panda [data-m=sleep] .sb{opacity:1;animation:pm-sn 2.6s ease-in-out infinite}@keyframes pm-sn{0%,100%{transform:scale(.12)}55%{transform:scale(1)}}
+.panda [data-m=up] .m-idle,.panda [data-m=sass] .m-idle,.panda [data-m=hmph] .m-idle,.panda [data-m=roll] .m-idle,.panda [data-m=love] .m-idle,.panda [data-m=shrug] .m-idle,.panda [data-m=sleep] .m-idle{display:none}
+@media (prefers-reduced-motion:reduce){.panda *{animation:none!important;transition-duration:.01s!important}}
