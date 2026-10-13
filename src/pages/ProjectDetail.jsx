@@ -26,6 +26,13 @@ const tabClass = (on) =>
       : "border-transparent text-foreground/60 hover:bg-primary/10 hover:text-primary"
   }`;
 
+// A step's pictures: the new `images` list, or the old single `image`.
+const imagesOf = (s) => {
+  const list = (s?.images ?? []).filter((p) => p?.url);
+  if (list.length) return list;
+  return s?.image ? [{ url: s.image, caption: "" }] : [];
+};
+
 const FramedView = ({ url, title, height }) => (
   <div className="overflow-hidden rounded-2xl border border-border bg-card">
     <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2 font-mono text-xs text-foreground/60">
@@ -47,6 +54,7 @@ const FramedView = ({ url, title, height }) => (
 const ProjectView = ({ project }) => {
   const [view, setView] = useState("walk");
   const [step, setStep] = useState(0);
+  const [shot, setShot] = useState(0); // which of the step's pictures is shown big
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -55,7 +63,14 @@ const ProjectView = ({ project }) => {
   const steps = project.steps ?? [];
   const current = steps[step];
   const multi = steps.length > 1;
-  const go = (i) => setStep((i + steps.length) % steps.length);
+  const pick = (i) => {
+    setStep(i);
+    setShot(0);
+  };
+  const go = (i) => pick((i + steps.length) % steps.length);
+
+  const gallery = imagesOf(current);
+  const shown = gallery[Math.min(shot, Math.max(gallery.length - 1, 0))];
 
   const tabs = [
     { key: "walk", label: "Walkthrough", icon: ImageIcon, show: true },
@@ -118,117 +133,148 @@ const ProjectView = ({ project }) => {
               ))}
             </div>
 
-            {multi && (
-              <div className="mt-8">
-                <WaveTimeline steps={steps} active={step} onSelect={setStep} />
-              </div>
-            )}
-
-            <div className={`mt-6 grid grid-cols-1 items-start gap-8 ${current ? "lg:grid-cols-[1.15fr_1fr]" : ""}`}>
-              {/* Big image (only when the project has walkthrough steps) */}
-              {current && (
-              <div className="overflow-hidden rounded-2xl border border-border bg-card">
-                <div
-                  className={`flex aspect-video w-full items-center justify-center ${
-                    current.image ? "" : PLACEHOLDER_TINTS[step % PLACEHOLDER_TINTS.length]
-                  }`}
-                >
-                  {current.image ? (
-                    <img
-                      src={current.image}
-                      alt={current.title}
-                      className="h-full w-full object-contain"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center gap-2 text-sm text-foreground/60">
-                      <ImageIcon size={28} />
-                      {current.label}
-                    </div>
-                  )}
-                </div>
-              </div>
+            {/* Timeline on the left, the step on the right */}
+            <div className={`mt-8 grid grid-cols-1 items-start gap-8 ${multi ? "md:grid-cols-[210px_minmax(0,1fr)]" : ""}`}>
+              {multi && (
+                <aside className="md:sticky md:top-20">
+                  <WaveTimeline steps={steps} active={step} onSelect={pick} />
+                </aside>
               )}
 
-              {/* Description */}
-              <div>
-                {multi && (
-                  <div className="mb-3 flex items-center justify-between">
-                    <span className="font-mono text-xs text-foreground/60">
-                      step {step + 1} of {steps.length}
-                    </span>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => go(step - 1)}
-                        aria-label="Previous step"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-border hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
-                      >
-                        <ArrowLeft size={14} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => go(step + 1)}
-                        aria-label="Next step"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-border hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
-                      >
-                        <ArrowRight size={14} />
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {current ? (
-                  <>
-                    <h2 className="text-xl font-bold">{current.title}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-foreground/75 md:text-base">
-                      {current.text}
-                    </p>
-                  </>
-                ) : (
-                  project.summary && (
-                    <p className="text-sm leading-relaxed text-foreground/75 md:text-base">
-                      {project.summary}
-                    </p>
-                  )
-                )}
-
-                {project.details?.length > 0 && (
-                  <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                    {project.details.map((item) => (
+              <div className={`grid grid-cols-1 items-start gap-8 ${current ? "xl:grid-cols-[1.15fr_1fr]" : ""}`}>
+                {/* Big image plus the step's other pictures (only when the project has walkthrough steps) */}
+                {current && (
+                  <div className="space-y-3">
+                    <div className="overflow-hidden rounded-2xl border border-border bg-card">
                       <div
-                        key={item.label}
-                        className="rounded-xl border border-border/60 bg-card/60 px-4 py-3"
+                        className={`flex aspect-video w-full items-center justify-center ${
+                          shown ? "" : PLACEHOLDER_TINTS[step % PLACEHOLDER_TINTS.length]
+                        }`}
                       >
-                        <div className="text-[11px] text-foreground/50">{item.label}</div>
-                        <div className="text-sm font-semibold">{item.value}</div>
+                        {shown ? (
+                          <img
+                            src={shown.url}
+                            alt={shown.caption || current.title}
+                            className="h-full w-full object-contain"
+                          />
+                        ) : (
+                          <div className="flex flex-col items-center gap-2 text-sm text-foreground/60">
+                            <ImageIcon size={28} />
+                            {current.label}
+                          </div>
+                        )}
                       </div>
-                    ))}
+                      {shown?.caption && (
+                        <p className="border-t border-border/60 px-4 py-2 text-xs text-foreground/70">
+                          {shown.caption}
+                        </p>
+                      )}
+                    </div>
+
+                    {gallery.length > 1 && (
+                      <div className="flex gap-2 overflow-x-auto pb-1">
+                        {gallery.map((im, k) => (
+                          <button
+                            key={`${im.url}-${k}`}
+                            type="button"
+                            onClick={() => setShot(k)}
+                            aria-label={im.caption ? `Show picture: ${im.caption}` : `Show picture ${k + 1}`}
+                            aria-current={k === shot ? "true" : undefined}
+                            className={`h-16 w-24 shrink-0 cursor-pointer overflow-hidden rounded-lg border bg-card transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                              k === shot
+                                ? "border-primary ring-2 ring-primary/30"
+                                : "border-border opacity-70 hover:opacity-100"
+                            }`}
+                          >
+                            <img src={im.url} alt="" loading="lazy" className="h-full w-full object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
-                    >
-                      <FaGithub size={16} />
-                      Source code
-                    </a>
+                {/* Description */}
+                <div>
+                  {multi && (
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="font-mono text-xs text-foreground/60">
+                        step {step + 1} of {steps.length}
+                      </span>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => go(step - 1)}
+                          aria-label="Previous step"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-border hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+                        >
+                          <ArrowLeft size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => go(step + 1)}
+                          aria-label="Next step"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-border hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer"
+                        >
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
                   )}
-                  {project.pdfUrl && (
-                    <a
-                      href={project.pdfUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground/80 transition-colors hover:bg-card/60"
-                    >
-                      <Download size={16} />
-                      Report (PDF)
-                    </a>
+
+                  {current ? (
+                    <>
+                      <h2 className="text-xl font-bold">{current.title}</h2>
+                      <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-foreground/75 md:text-base">
+                        {current.text}
+                      </p>
+                    </>
+                  ) : (
+                    project.summary && (
+                      <p className="text-sm leading-relaxed text-foreground/75 md:text-base">
+                        {project.summary}
+                      </p>
+                    )
                   )}
+
+                  {project.details?.length > 0 && (
+                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      {project.details.map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-xl border border-border/60 bg-card/60 px-4 py-3"
+                        >
+                          <div className="text-[11px] text-foreground/50">{item.label}</div>
+                          <div className="text-sm font-semibold">{item.value}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
+                      >
+                        <FaGithub size={16} />
+                        Source code
+                      </a>
+                    )}
+                    {project.pdfUrl && (
+                      <a
+                        href={project.pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground/80 transition-colors hover:bg-card/60"
+                      >
+                        <Download size={16} />
+                        Report (PDF)
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

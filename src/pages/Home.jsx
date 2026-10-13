@@ -17,7 +17,7 @@ import ChatWidget from "../components/ChatWidget";
 
 export const Home = () => {
     const [chatExpanded, setChatExpanded] = useState(false);
-
+    const CHAT_API_URL = import.meta.env.VITE_CHAT_API_URL ?? "http://localhost:8000/api/chat";
     return (
         <div
             className={`relative min-h-screen text-foreground overflow-x-hidden transition-[padding] duration-300 ${chatExpanded ? "lg:pr-[420px]" : ""}`}
@@ -41,7 +41,7 @@ export const Home = () => {
                 <Footer />
             </div>
             <ChatWidget
-                apiUrl="http://localhost:8000/api/chat"
+                apiUrl={CHAT_API_URL}
                 ownerName="Doja"
                 onExpandedChange={setChatExpanded}
             />

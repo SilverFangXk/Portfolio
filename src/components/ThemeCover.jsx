@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { optimized } from "../lib/Cloudinary";
 
-// Project card cover with a light version and a dark version of the same page.
-// It switches by itself every few seconds: the dark version grows out of the middle of the
-// picture like a light going off, with a short flicker, then it goes back on. No buttons.
-// With "reduce motion" on, it uses a gentle fade instead of the reveal and the flicker.
-// Used only by projects that have a "Dark mode image" saved in the admin.
-
 const CSS = `
 @keyframes tc-flicker{0%{opacity:0}12%{opacity:.55}24%{opacity:.05}38%{opacity:.4}52%{opacity:0}100%{opacity:0}}
 .tc-flicker{animation:tc-flicker .55s linear both}

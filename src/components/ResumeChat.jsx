@@ -28,17 +28,6 @@ const demoFetch = (question) =>
     )
   );
 
-/**
- * Chat window that answers from a resume, with the panda reacting to each step.
- *
- * Backend contract (POST apiUrl):
- *   request : { question: string }
- *   response: { answer: string, found: boolean, sources: [{ section: string, text: string }] }
- *   found=false means "this is not in the resume" and makes the panda shrug.
- *
- * Moods: greeting -> love, typing -> up, searching -> read, writing -> scroll,
- * answered -> music, not in resume / error -> shrug, 45s of inactivity -> sleep.
- */
 const Icon = ({ d }) => (
   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d={d} />
@@ -49,7 +38,7 @@ const COLLAPSE = 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7';
 const CLOSE = 'M18 6L6 18M6 6l12 12';
 
 export default function ResumeChat({
-  apiUrl = '/api/chat',
+  apiUrl = 'http://localhost:8000/api/chat',
   ownerName = 'Doja',
   suggestions = DEFAULT_SUGGESTIONS,
   pandaSize = 180,

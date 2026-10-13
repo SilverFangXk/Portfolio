@@ -4,16 +4,31 @@ import { getProject, removeProject, saveProject } from "../../lib/projectsDb";
 import { listItems, saveItem } from "../../lib/contentDb";
 import { DEFAULT_PROJECTS } from "../../lib/defaultContent";
 import { WaveTimeline } from "../WaveTimeline";
+import { GalleryField } from "./fields";
 import { Field, ImageField, SaveStatus, Section, btnGhost, btnMain, inp } from "./ui";
+
+/* ---------- steps: several images each ---------- */
+// A step keeps `images` = [{ url, caption }]. `image` (the first url) is still saved too,
+// so anything that only knows the old single-image field keeps working.
+const normStep = (s) => ({
+    ...s,
+    images: Array.isArray(s.images) && s.images.length ? s.images : s.image ? [{ url: s.image, caption: "" }] : [],
+});
+
+const cleanImages = (s) =>
+    (s.images ?? []).filter((p) => p?.url).map((p) => ({ url: p.url, caption: (p.caption ?? "").trim() }));
+
+const emptyStep = () => ({ label: "", title: "", text: "", image: "", images: [] });
 
 /* ---------- preview (what the project page will look like) ---------- */
 const Preview = ({ p, tags }) => {
     const steps = p.steps
-        .filter((s) => s.title.trim() || s.text.trim() || s.image)
+        .filter((s) => s.title.trim() || s.text.trim() || (s.images ?? []).length)
         .map((s, i) => ({ ...s, label: s.label.trim() || `Step ${i + 1}` }));
     const [i, setI] = useState(0);
     const active = Math.min(i, Math.max(steps.length - 1, 0));
     const cur = steps[active];
+    const imgs = (cur?.images ?? []).filter((x) => x?.url);
 
     return (
         <div className="space-y-6 rounded-2xl border border-border bg-card p-5">
@@ -35,11 +50,25 @@ const Preview = ({ p, tags }) => {
 
             {cur ? (
                 <div className="grid gap-6 md:grid-cols-[1.15fr_1fr]">
-                    <div className="flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-border bg-primary/10 text-sm text-foreground/60">
-                        {cur.image ? (
-                            <img src={cur.image} alt="" className="h-full w-full object-contain" />
-                        ) : (
-                            cur.label
+                    <div className="space-y-2">
+                        <div className="flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-border bg-primary/10 text-sm text-foreground/60">
+                            {imgs[0] ? (
+                                <img src={imgs[0].url} alt={imgs[0].caption ?? ""} className="h-full w-full object-contain" />
+                            ) : (
+                                cur.label
+                            )}
+                        </div>
+                        {imgs.length > 1 && (
+                            <div className="grid grid-cols-4 gap-2">
+                                {imgs.slice(1).map((im, k) => (
+                                    <img
+                                        key={`${im.url}-${k}`}
+                                        src={im.url}
+                                        alt={im.caption ?? ""}
+                                        className="aspect-video w-full rounded-lg border border-border bg-background object-cover"
+                                    />
+                                ))}
+                            </div>
                         )}
                     </div>
                     <div>
@@ -119,10 +148,12 @@ const FieldsPicker = ({ value, onChange }) => {
     );
 };
 
-// older projects may have no `fields`, or a single legacy `field` string
+// older projects may have no `fields`, or a single legacy `field` string;
+// older steps have a single `image` instead of `images`
 const normProject = (pr) => ({
     ...pr,
     fields: Array.isArray(pr.fields) ? pr.fields : pr.field ? [pr.field] : [],
+    steps: (pr.steps ?? []).map(normStep),
 });
 
 const emptyProject = () => ({
@@ -138,7 +169,7 @@ const emptyProject = () => ({
     demoUrl: "",
     pdfUrl: "",
     details: [],
-    steps: [{ label: "", title: "", text: "", image: "" }],
+    steps: [emptyStep()],
     createdAt: Date.now(),
 });
 
@@ -204,7 +235,12 @@ export const ProjectForm = ({ initial, onSaved, onCancel, onDirty, startSaved = 
                 tags,
                 details: p.details.filter((d) => d.label.trim() && d.value.trim()),
                 steps: p.steps
-                    .filter((s) => s.title.trim() || s.text.trim() || s.image)
+                    .map((s) => {
+                        const images = cleanImages(s);
+                        // `image` stays the first picture, for pages that only read the old field
+                        return { ...s, images, image: images[0]?.url ?? "" };
+                    })
+                    .filter((s) => s.title.trim() || s.text.trim() || s.images.length)
                     .map((s, i) => ({ ...s, label: s.label.trim() || `Step ${i + 1}` })),
             };
             await saveProject(data);
@@ -396,12 +432,20 @@ export const ProjectForm = ({ initial, onSaved, onCancel, onDirty, startSaved = 
                                 <Field label="Text">
                                     <textarea rows={4} value={s.text} onChange={(e) => patch("steps", i, { text: e.target.value })} className={inp} />
                                 </Field>
-                                <Field label="Image">
-                                    <ImageField compact value={s.image} onChange={(v) => patch("steps", i, { image: v })} />
-                                </Field>
+                                {/* Not wrapped in <Field>: several buttons inside one <label> would trigger the wrong one */}
+                                <div className="space-y-1.5">
+                                    <span className="text-xs font-semibold text-foreground/70">Images</span>
+                                    <GalleryField
+                                        value={s.images ?? []}
+                                        onChange={(v) => patch("steps", i, { images: v })}
+                                    />
+                                    <span className="block text-[11px] text-foreground/50">
+                                        Add as many as you want. The first one is the main image. Use the arrows to reorder them.
+                                    </span>
+                                </div>
                             </div>
                         ))}
-                        <button type="button" onClick={() => add("steps", { label: "", title: "", text: "", image: "" })} className={btnGhost}>
+                        <button type="button" onClick={() => add("steps", emptyStep())} className={btnGhost}>
                             <Plus size={16} /> Add a step
                         </button>
                     </Section>
