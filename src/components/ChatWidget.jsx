@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import PandaMascot from './PandaMascot';
 import ResumeChat from './ResumeChat';
 
-/**
- * Floating resume chat, fixed in the bottom-right corner on every screen.
- * Closed: the panda waves hello in a small bubble. Open: the chat panel.
- * The chat stays mounted when closed, so the conversation is kept.
- */
-export default function ChatWidget({ apiUrl = '/api/chat', ownerName = 'Doja', demo = false, onExpandedChange }) {
+export default function ChatWidget({
+  apiUrl,
+  ownerName = 'Doja',
+  demo = false,
+  onExpandedChange
+}) {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const full = open && expanded;
