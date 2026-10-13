@@ -217,8 +217,6 @@ export default function ResumeChat({
     send();
   };
 
-  // In expanded mode, the panda appears while the bot works
-  // and briefly after it finishes.
   const showDock =
     expanded &&
     (loading || mood === 'music' || mood === 'shrug');

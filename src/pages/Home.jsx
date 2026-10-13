@@ -18,7 +18,7 @@ import ChatWidget from "../components/ChatWidget";
 export const Home = () => {
     const [chatExpanded, setChatExpanded] = useState(false);
     const CHAT_API_URL = import.meta.env.VITE_CHAT_API_URL;
-    console.log("CHAT API URL:", CHAT_API_URL);
+    console.log("CHAT API URL:", CHAT_API_URL);g
     if (!CHAT_API_URL) {
         console.error("Missing VITE_CHAT_API_URL environment variable");
     }
