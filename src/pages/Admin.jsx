@@ -1933,7 +1933,7 @@ const Dashboard = ({ user }) => {
             </PandaPeek>
 
             {cfg.single ? (
-                <div className="max-w-2xl">
+                <div className="w-full min-w-0">
                     <Form onDirty={setDirty} />
                 </div>
             ) : (
