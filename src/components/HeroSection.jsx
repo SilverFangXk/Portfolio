@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import {
   Download,
@@ -26,7 +25,6 @@ import {
 
 // Default content
 const DEFAULT_TITLE = "Data & AI Engineer";
-
 const DEFAULT_HERO_TEXT =
   "Final-year Data Science & AI Engineering student building data pipelines and intelligent solutions. Seeking a 6-month PFE internship in Data or AI Engineering from February 2027.";
 
@@ -48,19 +46,13 @@ export const HeroSection = () => {
       const currentRequest = ++requestId;
 
       try {
-        const [
-          projects,
-          certifications,
-          skills,
-        ] = await Promise.all([
+        const [projects, certifications, skills] = await Promise.all([
           listProjects(),
           listItems("certifications"),
           listItems("skills"),
         ]);
 
-        if (!mounted || currentRequest !== requestId) {
-          return;
-        }
+        if (!mounted || currentRequest !== requestId) return;
 
         const countVisible = (items) =>
           (Array.isArray(items) ? items : []).filter(
@@ -73,91 +65,57 @@ export const HeroSection = () => {
           skills: countVisible(skills),
         });
       } catch (error) {
-        console.error(
-          "Could not load portfolio statistics:",
-          error
-        );
+        console.error("Could not load portfolio statistics:", error);
       }
     };
 
     // Refresh when returning from admin or another tab
     const onVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        refreshCounts();
-      }
+      if (document.visibilityState === "visible") refreshCounts();
     };
 
     refreshCounts();
 
     window.addEventListener("focus", refreshCounts);
     window.addEventListener("pageshow", refreshCounts);
-    window.addEventListener(
-      "portfolio-content-updated",
-      refreshCounts
-    );
-
-    document.addEventListener(
-      "visibilitychange",
-      onVisibilityChange
-    );
+    window.addEventListener("portfolio-content-updated", refreshCounts);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
       mounted = false;
-
       window.removeEventListener("focus", refreshCounts);
       window.removeEventListener("pageshow", refreshCounts);
-      window.removeEventListener(
-        "portfolio-content-updated",
-        refreshCounts
-      );
-
-      document.removeEventListener(
-        "visibilitychange",
-        onVisibilityChange
-      );
+      window.removeEventListener("portfolio-content-updated", refreshCounts);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
   const stats = useMemo(
     () => [
-      {
-        value: counts.projects,
-        label: "Projects",
-        icon: FolderKanban,
-      },
-      {
-        value: counts.certifications,
-        label: "Certifications",
-        icon: Award,
-      },
-      {
-        value: counts.skills,
-        label: "Skills",
-        icon: Layers,
-      },
+      { value: counts.projects, label: "Projects", icon: FolderKanban },
+      { value: counts.certifications, label: "Certifications", icon: Award },
+      { value: counts.skills, label: "Skills", icon: Layers },
     ],
     [counts]
   );
 
+  // CVs saved from Admin → Site → CV Documents
+  const resumeHrefFr = settings.cvUrl || myResume;
+  const resumeHrefEn = settings.cvUrl2 || "";
+
   // Editable admin settings
-  const resumeHref = settings.cvUrl || myResume;
   const showBadge = settings.badgeShow !== false;
   const badgeText = settings.badgeText || "open_to_work";
 
   const heroImage = settings.heroImage || myProfileImg;
-  const heroName =
-    settings.heroName || "Khadija Chkhichkh";
+  const heroName = settings.heroName || "Khadija Chkhichkh";
   const heroSubtitle =
-    settings.heroSubtitle ||
-    "Data Engineering / AI · ENSA Fès";
+    settings.heroSubtitle || "Data Engineering / AI · ENSA Fès";
 
   // Hero title animation
-  const titleWords = (
-    settings.heroTitle || DEFAULT_TITLE
-  )
+  const titleWords = (settings.heroTitle || DEFAULT_TITLE)
     .trim()
     .split(/\s+/);
-
   const titleLast = titleWords.pop();
   const titleFirst = titleWords.join(" ");
 
@@ -202,7 +160,6 @@ export const HeroSection = () => {
               className={`mt-6 text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-foreground ${fade}`}
             >
               {titleFirst && `${titleFirst} `}
-
               <SparkleText>
                 <ShimmerText>{titleLast}</ShimmerText>
               </SparkleText>
@@ -217,29 +174,40 @@ export const HeroSection = () => {
             </p>
           </Reveal>
 
+          {/* French CV + English CV + Projects */}
           <Reveal
             delay={0.55}
             className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3"
           >
             <a
-              href={resumeHref}
+              href={resumeHrefFr}
               {...(settings.cvUrl
-                ? {
-                    target: "_blank",
-                    rel: "noreferrer",
-                  }
-                : {
-                    download:
-                      "resume_khadija_chkhichkh.pdf",
-                  })}
-              className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium tracking-wide text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : { download: "CV_Khadija_Chkhichkh_FR.pdf" })}
+              className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium tracking-wide text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
             >
-              Download Resume
+              CV – FR
               <Download
                 size={15}
                 className="transition-transform duration-300 group-hover:translate-y-0.5"
               />
             </a>
+
+            {/* Appears after uploading the English CV in Admin */}
+            {resumeHrefEn && (
+              <a
+                href={resumeHrefEn}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 rounded-full border border-primary/50 bg-primary/10 px-6 py-3 text-sm font-medium tracking-wide text-foreground transition-all duration-300 hover:border-primary hover:bg-primary/20"
+              >
+                CV – EN
+                <Download
+                  size={15}
+                  className="transition-transform duration-300 group-hover:translate-y-0.5"
+                />
+              </a>
+            )}
 
             <a
               href="#projects"
@@ -255,10 +223,7 @@ export const HeroSection = () => {
         </div>
 
         {/* Hero photo */}
-        <Reveal
-          delay={0.3}
-          className="relative w-full max-w-sm mx-auto"
-        >
+        <Reveal delay={0.3} className="relative w-full max-w-sm mx-auto">
           <div className={`pt-20 pb-4 ${fade}`}>
             <HeroPhoto
               src={heroImage}
@@ -269,19 +234,12 @@ export const HeroSection = () => {
           </div>
 
           <div className="text-center">
-            <div className="font-bold text-foreground">
-              {heroName}
-            </div>
-            <div className="text-sm text-foreground/60">
-              {heroSubtitle}
-            </div>
+            <div className="font-bold text-foreground">{heroName}</div>
+            <div className="text-sm text-foreground/60">{heroSubtitle}</div>
           </div>
 
           {/* Automatic statistics */}
-          <StatCards
-            className="mt-5"
-            stats={stats}
-          />
+          <StatCards className="mt-5" stats={stats} />
         </Reveal>
       </div>
     </section>

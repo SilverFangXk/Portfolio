@@ -43,6 +43,7 @@ export function HeroPhoto({
   alt = '',
   size = 280,
   peek = true,
+  pandaScale = 0.52,
   chips = ['Big Data', 'Cloud', 'AI', 'Data Engineering'],
 }) {
   const [i, setI] = useState(0);
@@ -53,7 +54,7 @@ export function HeroPhoto({
   }, [i, peek]);
 
   const step = STEPS[i];
-  const pw = Math.round(size * 0.45); // panda width
+  const pw = Math.round(size * pandaScale); // adjustable panda width
   // Raise the panda high enough for its eyes, nose AND smile to clear the photo.
   // Her lower body stays hidden behind the circular photo.
   const pandaPeekTop = -pw * 0.50;
