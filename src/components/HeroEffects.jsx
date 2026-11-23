@@ -53,7 +53,11 @@ export function HeroPhoto({
   }, [i, peek]);
 
   const step = STEPS[i];
-  const pw = Math.round(size * 0.62); // panda width
+  const pw = Math.round(size * 0.45); // panda width
+  // Raise the panda high enough for its eyes, nose AND smile to clear the photo.
+  // Her lower body stays hidden behind the circular photo.
+  const pandaPeekTop = -pw * 0.50;
+  const pandaHideDistance = Math.round(pw * 0.62);
   const spots = [
     { right: '-12%', top: '16%', delay: '0s' },
     { left: '-14%', top: '38%', delay: '.8s' },
@@ -85,8 +89,8 @@ export function HeroPhoto({
         className="absolute left-1/2 z-0"
         style={{
           width: pw,
-          top: -pw * 0.35,
-          transform: `translateX(-50%) translateY(${step.show ? 0 : Math.round(pw * 0.32)}px)`,
+          top: pandaPeekTop,
+          transform: `translateX(-50%) translateY(${step.show ? 0 : pandaHideDistance}px)`,
           transition: step.show
             ? 'transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1)'
             : 'transform 380ms cubic-bezier(0.4, 0, 1, 1)',

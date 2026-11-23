@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { ExternalLink, Eye, FileText, Info, Route } from "lucide-react";
+import { ExternalLink, Eye, FileText, ImagePlus, Info, Route } from "lucide-react";
 import { getSettings, saveSettings } from "../../lib/contentDb";
 import { DEFAULT_EXP_STATUS } from "../../lib/defaultContent";
 import { uploadCV } from "../../lib/Cloudinary";
+import { uploadImage } from "../../lib/projectsDb";
+import defaultHeroImage from "../../assets/profile.jpeg";
 import { Field, SaveStatus, Section, btnGhost, btnMain, inp } from "./ui";
 
-const emptySettings = { heroTitle: "", heroText: "", cvUrl: "", cvUrl2: "", badgeShow: true, badgeText: "", expStatus: DEFAULT_EXP_STATUS };
+const emptySettings = { heroTitle: "", heroText: "", heroImage: "", heroName: "", heroSubtitle: "", cvUrl: "", cvUrl2: "", badgeShow: true, badgeText: "", expStatus: DEFAULT_EXP_STATUS };
 
 export const SiteForm = ({ onDirty }) => {
     const [start, setStart] = useState(null); // null = still loading
@@ -15,6 +17,8 @@ export const SiteForm = ({ onDirty }) => {
     const [err, setErr] = useState("");
     const [uploadingCV, setUploadingCV] = useState(null);
     const [cvError, setCvError] = useState("");
+    const [uploadingHero, setUploadingHero] = useState(false);
+    const [heroError, setHeroError] = useState("");
 
     useEffect(() => {
         getSettings()
@@ -54,14 +58,39 @@ export const SiteForm = ({ onDirty }) => {
         }
     };
 
+    const handleHeroUpload = async (file) => {
+        if (!file.type.startsWith("image/")) {
+            setHeroError("Please select an image file.");
+            return;
+        }
+        if (file.size > 15 * 1024 * 1024) {
+            setHeroError("Please choose an image smaller than 15 MB.");
+            return;
+        }
+        setUploadingHero(true);
+        setHeroError("");
+        try {
+            const url = await uploadImage(file);
+            set("heroImage", url);
+        } catch (error) {
+            setHeroError(error?.message || "Could not upload the hero picture.");
+        } finally {
+            setUploadingHero(false);
+        }
+    };
+
     const save = async (e) => {
         e.preventDefault();
+        if (uploadingHero || uploadingCV !== null) return;
         setSaving(true);
         setErr("");
         try {
             const clean = {
-                heroTitle: s.heroTitle.trim(),
-                heroText: s.heroText.trim(),
+                heroTitle: (s.heroTitle ?? "").trim(),
+                heroText: (s.heroText ?? "").trim(),
+                heroImage: (s.heroImage ?? "").trim(),
+                heroName: (s.heroName ?? "").trim(),
+                heroSubtitle: (s.heroSubtitle ?? "").trim(),
                 cvUrl: s.cvUrl.trim(),
                 cvUrl2: s.cvUrl2.trim(),
                 badgeShow: s.badgeShow !== false,
@@ -99,6 +128,73 @@ export const SiteForm = ({ onDirty }) => {
                         className={inp}
                     />
                 </Field>
+                <div className="border-t border-border pt-4">
+                    <p className="text-sm font-semibold text-foreground/80">Hero picture</p>
+                    <p className="mt-1 text-xs text-foreground/60">
+                        Upload a new profile picture. It appears in the circular Hero photo with the panda and floating chips.
+                    </p>
+                    <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center">
+                        <img
+                            src={s.heroImage || defaultHeroImage}
+                            alt="Current hero picture preview"
+                            className="h-36 w-36 shrink-0 rounded-full border-4 border-card bg-background object-cover shadow-md"
+                            onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = defaultHeroImage;
+                            }}
+                        />
+                        <div className="flex flex-col items-start gap-2">
+                            <label className={`${btnGhost} text-xs ${uploadingHero ? "cursor-wait opacity-60" : ""}`}>
+                                <ImagePlus size={14} />
+                                {uploadingHero ? "Uploading picture..." : s.heroImage ? "Replace picture" : "Upload picture"}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    disabled={uploadingHero || saving}
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        e.target.value = "";
+                                        if (file) handleHeroUpload(file);
+                                    }}
+                                />
+                            </label>
+                            {s.heroImage && (
+                                <button
+                                    type="button"
+                                    disabled={uploadingHero || saving}
+                                    onClick={() => set("heroImage", "")}
+                                    className="cursor-pointer text-xs text-foreground/60 hover:text-primary disabled:opacity-50"
+                                >
+                                    Restore original picture
+                                </button>
+                            )}
+                            <p className="text-[11px] text-foreground/50">
+                                JPG, PNG or WebP recommended · Max 15 MB · Click Save changes after upload.
+                            </p>
+                        </div>
+                    </div>
+                    {heroError && <p role="alert" className="mt-2 text-sm text-rose">{heroError}</p>}
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Name below picture" hint="Leave empty to display Khadija Chkhichkh.">
+                        <input
+                            value={s.heroName}
+                            placeholder="Khadija Chkhichkh"
+                            onChange={(e) => set("heroName", e.target.value)}
+                            className={inp}
+                        />
+                    </Field>
+                    <Field label="Subtitle below picture" hint="Short role and university line.">
+                        <input
+                            value={s.heroSubtitle}
+                            placeholder="Data Engineering / AI · ENSA Fès"
+                            onChange={(e) => set("heroSubtitle", e.target.value)}
+                            className={inp}
+                        />
+                    </Field>
+                </div>
             </Section>
 
 
@@ -192,7 +288,7 @@ export const SiteForm = ({ onDirty }) => {
 
             <div className="sticky bottom-4 z-20 flex items-center justify-between gap-3 rounded-2xl border border-border bg-card/95 px-4 py-3 shadow-lg backdrop-blur">
                 <SaveStatus dirty={dirty} saved={saved} />
-                <button type="submit" disabled={saving || uploadingCV !== null || !dirty} className={`${btnMain} px-5`}>
+                <button type="submit" disabled={saving || uploadingCV !== null || uploadingHero || !dirty} className={`${btnMain} px-5`}>
                     {saving ? "Saving..." : "Save changes"}
                 </button>
             </div>
